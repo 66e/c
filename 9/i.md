@@ -1,0 +1,15 @@
+<script src="https://66e.github.io/j/jsp.md"></script>
+
+[digital gardens](https://jzhao.xyz/posts/networked-thought)
+
+[root/a](https://66e.github.io/a)
+
+[root/l](https://66e.github.io/l)
+
+[root/r](https://66e.github.io/r)
+
+[root/rH](https://66e.github.io/r.htm)
+
+[root/w](https://66e.github.io/w)
+
+[root/wHtm](https://66e.github.io/raw-html-test.html)
