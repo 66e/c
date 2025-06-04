@@ -47,7 +47,13 @@ const jspanel_OL = () => {
 }
 
 const lyricer_OL = () => {
-    const text = '[00:29.40]いつだって誰かを想う (无论何时都会想起某个人)';
+    const fetchCors = async(url, targetElem) => {
+        const response = await fetch(url);
+        const docData = await response.text();
+        lrc.setLrc(docData);
+    }
+    const docUrl = 'https://66e.github.io/9/%E3%83%A9%E3%82%A4%E3%82%A2.md';
+    fetchCors(docUrl);
     const jspContainer = document.querySelector('div#jspContainer');
     const audio = document.createElement('audio');
     audio.controls = true; // 显示播放器控件
@@ -58,7 +64,6 @@ const lyricer_OL = () => {
     jspContainer.appendChild(lyricer);
 
     const lrc = new Lyricer();
-    lrc.setLrc(text);
 
     audio.addEventListener( "timeupdate", function() {
         lrc.move(audio.currentTime);
@@ -139,12 +144,12 @@ const preprocessPrecast = () => {
                     APlayer_OL();
                     break;
                 default:
-                    console.log(elemId);
+                    console.log(iterator + ' without func_OL');
 			}
 		});
 		document.documentElement.appendChild(referElem[iterator]);
 		checkbox[iterator].title = referElem[iterator].id;
-		console.log('referReady');
+		console.log(iterator + ' [' + elemId + '] is ready');
 	}
 
     for (let i = 0; i < referUrl.length; i++) {
