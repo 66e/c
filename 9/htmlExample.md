@@ -1,0 +1,17 @@
+<script src="https://66e.github.io/j/referHub-06.md"></script>
+
+<h1>
+	Raw HTML example
+</h1>
+
+<p>Hello!</p>
+
+<button id="button">Click me to add text to the page</button>
+<div id="text-container"></div>
+
+<script type="text/javascript">
+	document.querySelector("#button").onclick = () => {
+		document.querySelector("#text-container").innerHTML += 
+		`<p>The time is now ${new Date().toString()}</p>`	
+	}
+</script>
