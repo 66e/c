@@ -1,1 +1,1 @@
-<script src="https://66e.github.io/j/r-core-winDCL.js"></script>
+<script src="https://66e.github.io/j/rabbitLyrics.js"></script>

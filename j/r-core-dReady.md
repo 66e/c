@@ -1,1 +1,0 @@
-<script src="https://66e.github.io/j/r-core-dReady.js"></script>

@@ -1,7 +1,1 @@
-/**
-```js
-*/
-console.log('it works!');
-/**
-```
-*/
+<script src="https://66e.github.io/j/jekyllRT-CodesDS-js.md"></script>
