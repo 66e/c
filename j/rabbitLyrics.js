@@ -5,7 +5,7 @@
    * @param {function} [exportChecker] - 一个可选的函数，用于检查并返回脚本加载后的导出对象。
    * @returns {Promise<any>} 返回一个 Promise，成功时解析为导出的模块，失败时拒绝。
    */
-async function loadScriptAndGetExport(src, umdModuleName, exportChecker) {
+const loadScriptAndGetExport = async(src, umdModuleName, exportChecker) => {
     const script = document.createElement('script');
     script.src = src;
     script.type = 'text/javascript';
@@ -41,15 +41,6 @@ async function loadScriptAndGetExport(src, umdModuleName, exportChecker) {
 
     return await scriptLoadPromise;
   }
-
-const createButt = () => {
-  const button = document.createElement('button');
-  button.textContent = 'run';
-  button.addEventListener('mouseup', () => {
-    core();
-  });
-  document.body.insertBefore(button, document.body.firstChild);
-}
 
 const core = async () => {
   // 音乐和歌词的URL
@@ -137,11 +128,10 @@ const core = async () => {
     }
 }
 
-createButt();
 if (document.body) {
   core();
 } else {
-    document.addEventListener("readystatechange", () => {
+    document.addEventListener("DOMContentLoaded", () => {
       core();
     });
 }
