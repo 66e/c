@@ -1,7 +1,7 @@
 /*
 ```js
 */
-const loadScriptAndGetExport = async(src, umdModuleName, exportChecker) => {
+async function loadScriptAndGetExport(src, umdModuleName, exportChecker) {
     const script = document.createElement('script');
     script.src = src;
     script.type = 'text/javascript';
@@ -39,7 +39,7 @@ const loadScriptAndGetExport = async(src, umdModuleName, exportChecker) => {
   }
 
 
-  document.addEventListener('readystatechange', async () => {
+  document.addEventListener('load', async () => {
     // 音乐和歌词的URL
     const audioUrl = 'https://oss.mojidict.com/article/audio/dd16f7f0-8367-4d49-830a-3a66d0489982.mp3';
     const lyricUrl = 'https://66e.github.io/9/%E3%83%A9%E3%82%A4%E3%82%A2.md';

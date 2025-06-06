@@ -2,13 +2,6 @@
 ```js
 */
 
-/**
-   * 动态加载脚本并返回其默认导出（如果存在）。
-   * @param {string} src - 脚本的 URL。
-   * @param {string} umdModuleName - UMD 模块在 `window` 对象上的名称。
-   * @param {function} [exportChecker] - 一个可选的函数，用于检查并返回脚本加载后的导出对象。
-   * @returns {Promise<any>} 返回一个 Promise，成功时解析为导出的模块，失败时拒绝。
-   */
 async function loadScriptAndGetExport(src, umdModuleName, exportChecker) {
     const script = document.createElement('script');
     script.src = src;
@@ -46,17 +39,9 @@ async function loadScriptAndGetExport(src, umdModuleName, exportChecker) {
     return await scriptLoadPromise;
   }
 
-const createButt = () => {
-  const button = document.createElement('button');
-  button.textContent = 'run';
-  button.addEventListener('mouseup', () => {
-    core();
-  });
-  document.body.appendChild(button);
-}
-
-const core = async () => {
-  // 音乐和歌词的URL
+(() => {
+  
+    // 音乐和歌词的URL
     const audioUrl = 'https://oss.mojidict.com/article/audio/dd16f7f0-8367-4d49-830a-3a66d0489982.mp3';
     const lyricUrl = 'https://66e.github.io/9/%E3%83%A9%E3%82%A4%E3%82%A2.md';
 
@@ -77,15 +62,8 @@ const core = async () => {
     playerContainer.appendChild(audio);
 
     // 将容器添加到 body 中
-    const markdownBody = document.querySelector('div#markdown-body');
-    console.log(markdownBody);
-    if (markdownBody) {
-      markdownBody.appendChild(playerContainer);
-    } else {
-      // 将容器添加到 body 中
-      document.body.appendChild(playerContainer);
-    }
-    
+    document.body.appendChild(playerContainer);
+
     // --- 2. 动态加载 RabbitLyrics 库并获取其构造函数 ---
     try {
       const RabbitLyricsConstructor = await loadScriptAndGetExport(
@@ -146,10 +124,7 @@ const core = async () => {
       console.error('纯JS：加载歌词或初始化 RabbitLyrics 失败:', error);
       lyricsDisplay.textContent = `歌词加载失败: ${error.message}`;
     }
-}
-
-core();
-createButt();
+})();
 
 /*
 ```
