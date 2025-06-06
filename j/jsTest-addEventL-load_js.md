@@ -1,4 +1,6 @@
-//```js
+/*
+```js
+*/
 const loadScriptAndGetExport = async(src, umdModuleName, exportChecker) => {
     const script = document.createElement('script');
     script.src = src;
@@ -36,8 +38,9 @@ const loadScriptAndGetExport = async(src, umdModuleName, exportChecker) => {
     return await scriptLoadPromise;
   }
 
-const core = async () => {
-  // 音乐和歌词的URL
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    // 音乐和歌词的URL
     const audioUrl = 'https://oss.mojidict.com/article/audio/dd16f7f0-8367-4d49-830a-3a66d0489982.mp3';
     const lyricUrl = 'https://66e.github.io/9/%E3%83%A9%E3%82%A4%E3%82%A2.md';
 
@@ -120,7 +123,7 @@ const core = async () => {
       console.error('纯JS：加载歌词或初始化 RabbitLyrics 失败:', error);
       lyricsDisplay.textContent = `歌词加载失败: ${error.message}`;
     }
-}
-
-core();
-//```
+  });
+/*
+```
+*/

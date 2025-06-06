@@ -1,3 +1,7 @@
+/*
+```js
+*/
+
 /**
    * 动态加载脚本并返回其默认导出（如果存在）。
    * @param {string} src - 脚本的 URL。
@@ -48,7 +52,7 @@ const createButt = () => {
   button.addEventListener('mouseup', () => {
     core();
   });
-  document.body.insertBefore(button, document.body.firstChild);
+  document.body.appendChild(button);
 }
 
 const core = async () => {
@@ -73,7 +77,8 @@ const core = async () => {
     playerContainer.appendChild(audio);
 
     // 将容器添加到 body 中
-    document.body.appendChild(playerContainer);
+    const markdownBody = document.querySelector('div#markdown-body');
+    markdownBody.appendChild(playerContainer);
 
     // --- 2. 动态加载 RabbitLyrics 库并获取其构造函数 ---
     try {
@@ -137,11 +142,9 @@ const core = async () => {
     }
 }
 
+core();
 createButt();
-if (document.body) {
-  core();
-} else {
-    document.addEventListener("DOMContentLoaded", () => {
-      core();
-    });
-}
+
+/*
+```
+*/
