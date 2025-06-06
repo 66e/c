@@ -1,1 +1,1 @@
-<script src="https://66e.github.io/j/rabbitGP.md"></script>
+<script src="https://66e.github.io/j/rabbit-l-Promise.md"></script>

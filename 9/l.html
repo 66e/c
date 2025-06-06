@@ -1,1 +1,1 @@
-<script src="https://66e.github.io/j/rabbitGA.md"></script>
+<script src="https://66e.github.io/j/rabbit-l-async.md"></script>

@@ -78,8 +78,14 @@ const core = async () => {
 
     // 将容器添加到 body 中
     const markdownBody = document.querySelector('div#markdown-body');
-    markdownBody.appendChild(playerContainer);
-
+    console.log(markdownBody);
+    if (markdownBody) {
+      markdownBody.appendChild(playerContainer);
+    } else {
+      // 将容器添加到 body 中
+      document.body.appendChild(playerContainer);
+    }
+    
     // --- 2. 动态加载 RabbitLyrics 库并获取其构造函数 ---
     try {
       const RabbitLyricsConstructor = await loadScriptAndGetExport(
