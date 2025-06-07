@@ -1,3 +1,7 @@
+/*
+```js
+*/
+
 /**
    * 动态加载脚本并返回其默认导出（如果存在）。
    * @param {string} src - 脚本的 URL。
@@ -128,3 +132,7 @@ async function loadScriptAndGetExport(src, umdModuleName, exportChecker) {
       lyricsDisplay.textContent = `歌词加载失败: ${error.message}`;
     }
   });
+
+/*
+```
+*/
