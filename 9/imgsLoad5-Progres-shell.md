@@ -1,1 +1,0 @@
-<meta http-equiv="refresh" content="0;url=https://66e.github.io/9/imgsLoad5-Progres" />
