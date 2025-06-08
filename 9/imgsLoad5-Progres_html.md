@@ -1,5 +1,5 @@
 <!--
-```htm
+```html
 -->
 
 <button id="add">Add images</button>
