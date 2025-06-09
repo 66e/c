@@ -1,0 +1,1 @@
+<script src="https://66e.github.io/9/fGadget-jsPanel_js.md"></script>

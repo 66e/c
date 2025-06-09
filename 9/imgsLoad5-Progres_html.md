@@ -1,6 +1,6 @@
-<!--
+<!-- 
 ```html
--->
+ -->
 
 <button id="add">Add images</button>
 <button id="reset">Reset</button>
@@ -172,6 +172,6 @@ button {
   href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css"
 />
 
-<!--
+<!-- 
 ```
--->
+ -->

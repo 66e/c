@@ -2,15 +2,6 @@
 ```js
 */
 
-// ==UserScript==
-// @name         referHub-06
-// @namespace    https://bbs.tampermonkey.net.cn/
-// @version      0.6.3
-// @description  try to take over the world!
-// @author       You
-// @match        *://*/*
-// ==/UserScript==
-
 (() => {
     'use strict';
 
@@ -50,58 +41,39 @@ const jspanel_OL = () => {
     jsPanel.create({content: '<div id="jspContainer"></div>'});
 }
 
-const lyricer_OL = () => {
-    const fetchCors = async(url, targetElem) => {
-        const response = await fetch(url);
-        const docData = await response.text();
-        lrc.setLrc(docData);
-    }
-    const docUrl = 'https://66e.github.io/9/%E3%83%A9%E3%82%A4%E3%82%A2.md';
-    fetchCors(docUrl);
-    const jspContainer = document.querySelector('div#jspContainer');
-    const audio = document.createElement('audio');
-    audio.controls = true; // 显示播放器控件
-    audio.src = 'https://oss.mojidict.com/article/audio/dd16f7f0-8367-4d49-830a-3a66d0489982.mp3';  // 设置音频源
-    jspContainer.appendChild(audio);
-    const lyricer = document.createElement('div');
-    lyricer.id = 'lyricer';
-    jspContainer.appendChild(lyricer);
-
-    const lrc = new Lyricer();
-
-    audio.addEventListener( "timeupdate", function() {
-        lrc.move(audio.currentTime);
-    });
-
-    window.addEventListener('lyricerclick', function(e){
-        if (e.detail.time > 0) {
-            audio.currentTime = e.detail.time;
-        }
-    });
+const imagesloaded_OL = () => {
+    processElem();
 }
 
-const jsframe_OL = () => {
-	const jsFrame = new JSFrame();
-	const frame = jsFrame.create({
-    title: 'Window',
-    left: 20, top: 120, width: 320, height: 220,
-    html: '<div id="aplayer"></div>'
-	});
-	frame.show();
-}
+const processElem = () => {
+    const fruits = [
+    "https://7ed.net/bing/api?rand=true&size=1024x768", 
+    "https://picsum.photos/v2/list", 
+    "https://api.7ed.net/bing/api", 
+    "https://picsum.photos/536/354"
+];
 
-const APlayer_OL = () => {
-	const ap = new APlayer({
-    container: document.getElementById('aplayer'),
-    lrcType: 3,
-    audio: [{
-        name: 'ライア',
-        artist: 'Zwei',
-        url: 'https://oss.mojidict.com/article/audio/dd16f7f0-8367-4d49-830a-3a66d0489982.mp3',
-        cover: 'https://zweima.com/wp/wp-content/uploads/b2b99ccc4fe2b7d9e69f2b14b16b7a2e-1024x1024.jpg',
-        lrc: 'https://66e.github.io/%E3%83%A9%E3%82%A4%E3%82%A2.lrc'
-    }]
+const fragment = new DocumentFragment();
+
+fruits.forEach((fruit) => {
+    const myImage = new Image(100, 200);
+    myImage.src = fruit;
+    fragment.appendChild(myImage);
 });
+
+const imgLoad = imagesLoaded( fragment );
+imgLoad.on( 'always', function() {
+  console.log( imgLoad.images.length + ' images loaded' );
+  // detect which image is broken
+  for ( let i = 0, len = imgLoad.images.length; i < len; i++ ) {
+    const image = imgLoad.images[i];
+    const result = image.isLoaded ? 'loaded' : 'broken';
+    console.log( 'image is ' + result + ' for ' + image.img.src );
+  }
+});
+
+const jspContainer = document.querySelector("div#jspContainer");
+jspContainer.appendChild(fragment);
 }
 
 const preprocessPrecast = () => {
@@ -123,8 +95,9 @@ const preprocessPrecast = () => {
     const referUrl = [
         'https://jspanel.de/jspanel/dist/jspanel.min.css',
         'https://jspanel.de/jspanel/dist/jspanel.min.js',
-        'https://lusaisai.github.io/Lyricer/Lyricer-master/lyricer.min.css',
-        'https://lusaisai.github.io/Lyricer/Lyricer-master/lyricer.min.js'
+        'https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.min.css',
+        'https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.min.js'
     ];
     const checkbox = [];
     const referElem = [];
@@ -135,25 +108,22 @@ const preprocessPrecast = () => {
 		const elemId = referElem[iterator].id;
 		referElem[iterator].addEventListener("load", () => {
 			switch (elemId) {
-                case 'jspanel_min_js':
-                    jspanel_OL();
-                    break;
-                case 'lyricer_min_js':
-                    lyricer_OL();
-                    break;
-                case 'jsframe_js':
-                    jsframe_OL();
-                    break;
-                case 'APlayer_min_js':
-                    APlayer_OL();
-                    break;
-                default:
-                    console.log(iterator + ' without func_OL');
+			case 'jspanel_min_js':
+				jspanel_OL();
+				break;
+            case 'imagesloaded_pkgd_min_js':
+				imagesloaded_OL();
+				break;
+			case 'fancybox_umd_min_js':
+				fancybox_OL();
+				break;
+			default:
+				console.log( iterator + ' without func_OL' );
 			}
 		});
 		document.documentElement.appendChild(referElem[iterator]);
 		checkbox[iterator].title = referElem[iterator].id;
-		console.log(iterator + ' [' + elemId + '] is ready');
+		console.log( iterator + ' [' + elemId + '] is ready' );
 	}
 
     for (let i = 0; i < referUrl.length; i++) {
