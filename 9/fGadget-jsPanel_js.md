@@ -46,7 +46,7 @@ const imagesloaded_OL = () => {
 }
 
 const processElem = () => {
-    const fruits = [
+    const urlS = [
     "https://7ed.net/bing/api?rand=true&size=1024x768", 
     "https://picsum.photos/v2/list", 
     "https://api.7ed.net/bing/api", 
@@ -55,21 +55,25 @@ const processElem = () => {
 
 const fragment = new DocumentFragment();
 
-fruits.forEach((fruit) => {
+urlS.forEach((url) => {
     const myImage = new Image(100, 200);
-    myImage.src = fruit;
+    myImage.src = url;
     fragment.appendChild(myImage);
 });
 
 const imgLoad = imagesLoaded( fragment );
-imgLoad.on( 'always', function() {
-  console.log( imgLoad.images.length + ' images loaded' );
-  // detect which image is broken
-  for ( let i = 0, len = imgLoad.images.length; i < len; i++ ) {
-    const image = imgLoad.images[i];
-    const result = image.isLoaded ? 'loaded' : 'broken';
-    console.log( 'image is ' + result + ' for ' + image.img.src );
-  }
+imgLoad.on( 'always', ( instance ) => {
+  console.log( imgLoad.images.length + ' in total' );
+});
+imgLoad.on( 'done', ( instance ) => {
+  console.log('DONE  - all images have been successfully loaded');
+});
+imgLoad.on( 'fail', ( instance ) => {
+  console.log('FAIL - all images loaded, at least one is broken');
+});
+imgLoad.on( 'progress', ( instance, image ) => {
+  var result = image.isLoaded ? 'loaded' : 'broken';
+  console.log( '[' + result + '] ' + image.img.src );
 });
 
 const jspContainer = document.querySelector("div#jspContainer");
@@ -118,12 +122,10 @@ const preprocessPrecast = () => {
 				fancybox_OL();
 				break;
 			default:
-				console.log( iterator + ' without func_OL' );
 			}
 		});
 		document.documentElement.appendChild(referElem[iterator]);
 		checkbox[iterator].title = referElem[iterator].id;
-		console.log( iterator + ' [' + elemId + '] is ready' );
 	}
 
     for (let i = 0; i < referUrl.length; i++) {

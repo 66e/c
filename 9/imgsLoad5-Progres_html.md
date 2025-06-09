@@ -1,4 +1,4 @@
-```htm
+```html
 
 <button id="add">Add images</button>
 <button id="reset">Reset</button>
