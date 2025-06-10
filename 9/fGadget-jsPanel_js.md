@@ -51,11 +51,14 @@ const processElem = () => {
     "https://picsum.photos/v2/list", 
     "https://api.7ed.net/bing/api", 
     "https://picsum.photos/536/354"
-];
+    ];
+    const objS = [];
 
 const fragment = new DocumentFragment();
 
 urlS.forEach((url) => {
+    objS.push({ src: url });
+    
     const li = document.createElement("li");
     li.style.backgroundColor = "#000";
     li.style.backgroundImage = "url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/82/loading.gif')";
@@ -73,6 +76,19 @@ urlS.forEach((url) => {
     img.style.opacity = 0;
     img.style.maxHeight = "70px";
     img.style.transition = "opacity 0.4s";
+    img.addEventListener("click", (e) => {
+        const crrntPrnt = e.currentTarget.parentNode;
+        const galIdx = [].indexOf.call(crrntPrnt.parentNode.childNodes, crrntPrnt);
+        new Fancybox(
+            // Array containing gallery items
+            objS,
+            // Gallery options
+            {
+                startIndex: galIdx,
+            }
+        );
+    });
+
     li.appendChild(img);
     fragment.appendChild(li);
 });
@@ -91,7 +107,7 @@ imgLoad.on( 'progress', ( instance, image ) => {
     if ( image.isLoaded ) {
         image.img.style.opacity = 1;
     } else {
-        image.img.parentNode.style.backgroundColor = "#000";
+        image.img.parentNode.style.backgroundColor = "#f00";
         image.img.parentNode.style.backgroundImage = "url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/82/broken.png')";
     }
     const result = image.isLoaded ? 'loaded' : 'broken';
@@ -139,9 +155,6 @@ const preprocessPrecast = () => {
 				break;
             case 'imagesloaded_pkgd_min_js':
 				imagesloaded_OL();
-				break;
-			case 'fancybox_umd_min_js':
-				fancybox_OL();
 				break;
 			default:
 			}
@@ -195,7 +208,6 @@ const createBar = () => {
     div.style.bottom = '16px';
     div.style.right = '0px';
     div.style.width = '16px';
-    div.style.height = '160px';
     div.style.backgroundColor = '#ccc';
     div.style.display = 'none';
     div.addEventListener('mouseleave', () => {
