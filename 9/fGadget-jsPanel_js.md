@@ -56,9 +56,25 @@ const processElem = () => {
 const fragment = new DocumentFragment();
 
 urlS.forEach((url) => {
-    const myImage = new Image(100, 200);
-    myImage.src = url;
-    fragment.appendChild(myImage);
+    const li = document.createElement("li");
+    li.style.backgroundColor = "#000";
+    li.style.backgroundImage = "url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/82/loading.gif')";
+    li.style.backgroundPosition = "center center";
+    li.style.backgroundRepeat = "no-repeat";
+    li.style.borderRadius="4px";
+    li.style.display = "block";
+    li.style.float = "left";
+    li.style.height = "70px";
+    li.style.margin="2px 2px 2px 2px";
+
+    const img = new Image(100, 200);
+    img.src = url;
+    img.style.borderRadius="4px";
+    img.style.opacity = 0;
+    img.style.maxHeight = "70px";
+    img.style.transition = "opacity 0.4s";
+    li.appendChild(img);
+    fragment.appendChild(li);
 });
 
 const imgLoad = imagesLoaded( fragment );
@@ -72,8 +88,14 @@ imgLoad.on( 'fail', ( instance ) => {
   console.log('FAIL - all images loaded, at least one is broken');
 });
 imgLoad.on( 'progress', ( instance, image ) => {
-  var result = image.isLoaded ? 'loaded' : 'broken';
-  console.log( '[' + result + '] ' + image.img.src );
+    if ( image.isLoaded ) {
+        image.img.style.opacity = 1;
+    } else {
+        image.img.parentNode.style.backgroundColor = "#000";
+        image.img.parentNode.style.backgroundImage = "url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/82/broken.png')";
+    }
+    const result = image.isLoaded ? 'loaded' : 'broken';
+    console.log( '[' + result + '] ' + image.img.src );
 });
 
 const jspContainer = document.querySelector("div#jspContainer");
