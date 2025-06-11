@@ -37,12 +37,81 @@ const createByExtens = (urlFile, fileExtens) => {
     }
 }
 
+const fetchCors = async (url, targetEl) => {
+    const respons = await fetch(url);
+    const docData = await respons.text();
+    targetEl.value = docData;
+}
+
 const jspanel_OL = () => {
-    jsPanel.create({content: '<div id="jspContainer"></div>'});
+    const visualizeComponentS = () => {
+        const input = document.createElement("input");
+        input.addEventListener("dblclick", () => {
+            input.value = '';
+        });
+        input.addEventListener("paste", (e) => {
+            setTimeout(() => {
+                fetchCors(e.target.value, textarea);
+            }, 1);
+        });
+        input.id = "input";
+        input.size = 40;
+        const docUrl = 'https://66e.github.io/j/prideAndP.md';
+        input.value = docUrl;
+        const btnRtrv = document.createElement("button");
+        btnRtrv.addEventListener("click", () => {
+            fetchCors(input.value, textarea);
+        });
+        btnRtrv.textContent = "retrieve";
+        btnRtrv.id = "btnRtrv";
+        const checkbox = document.createElement("input");
+        checkbox.textContent = "checkbox";
+        checkbox.id = "checkbox";
+        checkbox.type = "checkbox";
+        const textarea = document.createElement("textarea");
+        textarea.addEventListener("change", () => {
+            
+        });
+        textarea.id = "textarea";
+        textarea.cols = "50";
+        textarea.rows = "10";
+        const btnRslv = document.createElement("button");
+        btnRslv.textContent = "resolve";
+        btnRslv.id = "btnRslv";
+        
+        const div = document.createElement("div");
+        div.id = "dashboard";
+        div.appendChild(input);
+        div.appendChild(btnRtrv);
+        div.appendChild(checkbox);
+        div.appendChild(textarea);
+        div.appendChild(btnRslv);
+        return div;
+    }
+
+    jsPanel.create({
+        callback: (panel) => {
+            const unit = visualizeComponentS();
+            panel.content.appendChild(unit);
+        },
+        contentSize: '500 300',
+        dragit: {
+            snap: true,
+        },
+        headerTitle: 'dashboard',
+        position: 'left-top',
+        theme: 'dark',
+    });
 }
 
 const imagesloaded_OL = () => {
-    processElem();
+    const unit = processElem();
+    jsPanel.create({
+        callback: (panel) => {
+            panel.content.appendChild(unit);
+        },
+        theme: 'primary',
+    });
 }
 
 const processElem = () => {
@@ -53,8 +122,7 @@ const processElem = () => {
     "https://picsum.photos/536/354"
     ];
     const objS = [];
-
-const fragment = new DocumentFragment();
+    const div = document.createElement("div");
 
 urlS.forEach((url) => {
     objS.push({ src: url });
@@ -90,10 +158,10 @@ urlS.forEach((url) => {
     });
 
     li.appendChild(img);
-    fragment.appendChild(li);
+    div.appendChild(li);
 });
 
-const imgLoad = imagesLoaded( fragment );
+const imgLoad = imagesLoaded( div );
 imgLoad.on( 'always', ( instance ) => {
   console.log( imgLoad.images.length + ' in total' );
 });
@@ -114,8 +182,8 @@ imgLoad.on( 'progress', ( instance, image ) => {
     console.log( '[' + result + '] ' + image.img.src );
 });
 
-const jspContainer = document.querySelector("div#jspContainer");
-jspContainer.appendChild(fragment);
+div.id = "jspContainer";
+return div;
 }
 
 const preprocessPrecast = () => {
