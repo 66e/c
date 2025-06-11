@@ -1,1 +1,1 @@
-<script src="https://66e.github.io/9/fGadget-02_js.md"></script>
+<script src="https://66e.github.io/9/loadFanPan_JS.md"></script>

@@ -1,6 +1,7 @@
 /*
 ```js
 */
+
 /**
    * 动态加载脚本并返回其默认导出（如果存在）。
    * @param {string} src - 脚本的 URL。
@@ -8,7 +9,7 @@
    * @param {function} [exportChecker] - 一个可选的函数，用于检查并返回脚本加载后的导出对象。
    * @returns {Promise<any>} 返回一个 Promise，成功时解析为导出的模块，失败时拒绝。
    */
-async function loadScriptAndGetExport(src, umdModuleName, exportChecker) {
+const loadScriptAndGetExport = async (src, umdModuleName, exportChecker) => {
     const script = document.createElement('script');
     script.src = src;
     script.type = 'text/javascript';
@@ -131,6 +132,7 @@ async function loadScriptAndGetExport(src, umdModuleName, exportChecker) {
       lyricsDisplay.textContent = `歌词加载失败: ${error.message}`;
     }
   });
+  
 /*
 ```
 */

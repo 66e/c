@@ -8,7 +8,7 @@ const fetchCors = async(url, targetElem) => {
     document.write(docData);
 }
 
-const docUrl = 'imgsLoad5-Progres_html.md';
+const docUrl = 'https://66e.github.io/9/imgsLoad5-Progres_html.md';
 fetchCors(docUrl);
 
 /*
