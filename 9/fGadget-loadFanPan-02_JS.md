@@ -37,26 +37,56 @@ const createByExtens = (urlFile, fileExtens) => {
     }
 }
 
+const fetchCors = async (url, targetEl) => {
+    const respons = await fetch(url);
+    const docData = await respons.text();
+    targetEl.value = docData;
+    console.log(docData);
+}
+
 const jspanel_OL = () => {
     const visualizeComponentS = () => {
         const input = document.createElement("input");
-        const docUrl = 'https://66e.github.io/j/prideAndP.md';
+        input.addEventListener("dblclick", () => {
+            input.value = '';
+        });
+        input.addEventListener("paste", (e) => {
+            setTimeout(() => {
+                fetchCors(e.target.value, textarea);
+            }, 1);
+        });
         input.id = "input";
         input.size = 40;
+        const docUrl = 'https://66e.github.io/j/prideAndP.md';
         input.value = docUrl;
-        const button = document.createElement("button");
-        button.textContent = "button";
-        button.id = "button";
+        const btnRtrv = document.createElement("button");
+        btnRtrv.addEventListener("click", () => {
+            fetchCors(input.value, textarea);
+        });
+        btnRtrv.textContent = "retrieve";
+        btnRtrv.id = "btnRtrv";
         const checkbox = document.createElement("input");
         checkbox.textContent = "checkbox";
         checkbox.id = "checkbox";
         checkbox.type = "checkbox";
+        const textarea = document.createElement("textarea");
+        textarea.addEventListener("change", () => {
+            
+        });
+        textarea.id = "textarea";
+        textarea.cols = "50";
+        textarea.rows = "10";
+        const btnRslv = document.createElement("button");
+        btnRslv.textContent = "resolve";
+        btnRslv.id = "btnRslv";
         
         const div = document.createElement("div");
         div.id = "dashboard";
         div.appendChild(input);
-        div.appendChild(button);
+        div.appendChild(btnRtrv);
         div.appendChild(checkbox);
+        div.appendChild(textarea);
+        div.appendChild(btnRslv);
         return div;
     }
 
