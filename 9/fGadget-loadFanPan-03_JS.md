@@ -41,6 +41,28 @@ const fetchCors = async (url, targetEl) => {
     const respons = await fetch(url);
     const docData = await respons.text();
     targetEl.value = docData;
+    panLoadFan(docData);
+}
+
+const extractUrls = (input) => {
+// Search the input text for URLs (the regular expression pattern is taken from the excellent
+// "Regular Expressions Cookbook" by Jan Goyvaerts and Steven Levithan)
+    const match = input.match(/\b((https?|ftp|file):\/\/|(www|ftp)\.)[-A-Z0-9+&@#\/%?=~_|$!:,.;]*[A-Z0-9+&@#\/%=~_|$]/ig);
+
+// Output the found URLs
+    return match ? match : "No URLs found";
+}
+
+const panLoadFan = (input) => {
+    const urlS = extractUrls (input);
+    const unit = processElem(urlS);
+    jsPanel.create({
+        callback: (panel) => {
+            panel.content.appendChild(unit);
+        },
+        theme: 'primary',
+    });
+  return x + y;
 }
 
 const jspanel_OL = () => {
@@ -114,13 +136,7 @@ const imagesloaded_OL = () => {
     });
 }
 
-const processElem = () => {
-    const urlS = [
-    "https://7ed.net/bing/api?rand=true&size=1024x768", 
-    "https://picsum.photos/v2/list", 
-    "https://api.7ed.net/bing/api", 
-    "https://picsum.photos/536/354"
-    ];
+const processElem = (urlS) => {
     const objS = [];
     const div = document.createElement("div");
 
@@ -222,7 +238,7 @@ const preprocessPrecast = () => {
 				jspanel_OL();
 				break;
             case 'imagesloaded_pkgd_min_js':
-				imagesloaded_OL();
+
 				break;
 			default:
 			}
