@@ -38,11 +38,49 @@ const createByExtens = (urlFile, fileExtens) => {
 }
 
 const jspanel_OL = () => {
-    jsPanel.create({content: '<div id="jspContainer"></div>'});
+    visualizeUI();
 }
 
 const imagesloaded_OL = () => {
+    jsPanel.create({content: '<div id="jspContainer"></div>'});
     processElem();
+}
+
+const visualizeUI = () => {
+    const createComponentS = () => {
+        const input = document.createElement("input");
+        const docUrl = 'https://66e.github.io/j/prideAndP.md';
+        input.id = "input";
+        input.size = 40;
+        input.value = docUrl;
+        const button = document.createElement("button");
+        button.textContent = "button";
+        button.id = "button";
+        const checkbox = document.createElement("input");
+        checkbox.textContent = "checkbox";
+        checkbox.id = "checkbox";
+        checkbox.type = "checkbox";
+        
+        const div = document.createElement("div");
+        div.id = "dashboard";
+        div.appendChild(input);
+        div.appendChild(button);
+        div.appendChild(checkbox);
+        return div;
+    }
+    jsPanel.create({
+        callback: (panel) => {
+            const unit = createComponentS();
+            panel.content.appendChild(unit);
+        },
+        contentSize: '500 300',
+        dragit: {
+            snap: true,
+        },
+        headerTitle: 'dashboard',
+        position: 'left-top',
+        theme: 'primary',
+    });
 }
 
 const processElem = () => {
@@ -107,7 +145,7 @@ imgLoad.on( 'progress', ( instance, image ) => {
         image.img.style.opacity = 1;
     } else {
         image.img.parentNode.style.backgroundColor = "#000";
-        image.img.parentNode.style.backgroundImage = "url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/82/broken.png')";
+        image.img.parentNode.style.backgroundImage = "url('https://cdn-dynmedia-1.microsoft.com/is/content/microsoftcorp/1025082-card-grid-product-icons-card-ai-service-icon-color')";
     }
     const result = image.isLoaded ? 'loaded' : 'broken';
     console.log( '[' + result + '] ' + image.img.src );
