@@ -37,26 +37,76 @@ const createByExtens = (urlFile, fileExtens) => {
     }
 }
 
+const fetchCors = async (url, targetEl) => {
+    const respons = await fetch(url);
+    const docData = await respons.text();
+    targetEl.value = docData;
+    panLoadFan(docData);
+}
+
+const extractUrls = (input) => {
+// Search the input text for URLs (the regular expression pattern is taken from the excellent
+// "Regular Expressions Cookbook" by Jan Goyvaerts and Steven Levithan)
+    const match = input.match(/\b((https?|ftp|file):\/\/|(www|ftp)\.)[-A-Z0-9+&@#\/%?=~_|$!:,.;]*[A-Z0-9+&@#\/%=~_|$]/ig);
+
+// Output the found URLs
+    return match ? match : "No URLs found";
+}
+
+const panLoadFan = (input) => {
+    const urlS = extractUrls (input);
+    const unit = processElem(urlS);
+    jsPanel.create({
+        callback: (panel) => {
+            panel.content.appendChild(unit);
+        },
+        theme: 'primary',
+    });
+}
+
 const jspanel_OL = () => {
     const visualizeComponentS = () => {
         const input = document.createElement("input");
-        const docUrl = 'https://66e.github.io/j/prideAndP.md';
+        input.addEventListener("dblclick", () => {
+            input.value = '';
+        });
+        input.addEventListener("paste", (e) => {
+            setTimeout(() => {
+                fetchCors(e.target.value, textarea);
+            }, 1);
+        });
         input.id = "input";
         input.size = 40;
+        const docUrl = 'https://66e.github.io/j/prideAndP.md';
         input.value = docUrl;
-        const button = document.createElement("button");
-        button.textContent = "button";
-        button.id = "button";
+        const btnRtrv = document.createElement("button");
+        btnRtrv.addEventListener("click", () => {
+            fetchCors(input.value, textarea);
+        });
+        btnRtrv.textContent = "retrieve";
+        btnRtrv.id = "btnRtrv";
         const checkbox = document.createElement("input");
         checkbox.textContent = "checkbox";
         checkbox.id = "checkbox";
         checkbox.type = "checkbox";
+        const textarea = document.createElement("textarea");
+        textarea.addEventListener("change", () => {
+            
+        });
+        textarea.id = "textarea";
+        textarea.cols = "50";
+        textarea.rows = "10";
+        const btnRslv = document.createElement("button");
+        btnRslv.textContent = "resolve";
+        btnRslv.id = "btnRslv";
         
         const div = document.createElement("div");
         div.id = "dashboard";
         div.appendChild(input);
-        div.appendChild(button);
+        div.appendChild(btnRtrv);
         div.appendChild(checkbox);
+        div.appendChild(textarea);
+        div.appendChild(btnRslv);
         return div;
     }
 
@@ -76,22 +126,22 @@ const jspanel_OL = () => {
 }
 
 const imagesloaded_OL = () => {
-    const unit = processElem();
+    const urlS = [
+        "https://7ed.net/bing/api?rand=true&size=1024x768", 
+        "https://picsum.photos/v2/list", 
+        "https://api.7ed.net/bing/api", 
+        "https://picsum.photos/536/354"
+    ];
+    const unit = processElem(urlS);
     jsPanel.create({
-    callback: (panel) => {
-        panel.content.appendChild(unit);
-    },
-    theme: 'primary',
-});
+        callback: (panel) => {
+            panel.content.appendChild(unit);
+        },
+        theme: 'primary',
+    });
 }
 
-const processElem = () => {
-    const urlS = [
-    "https://7ed.net/bing/api?rand=true&size=1024x768", 
-    "https://picsum.photos/v2/list", 
-    "https://api.7ed.net/bing/api", 
-    "https://picsum.photos/536/354"
-    ];
+const processElem = (urlS) => {
     const objS = [];
     const div = document.createElement("div");
 
@@ -127,6 +177,7 @@ urlS.forEach((url) => {
             }
         );
     });
+
     li.appendChild(img);
     div.appendChild(li);
 });
@@ -136,17 +187,17 @@ imgLoad.on( 'always', ( instance ) => {
   console.log( imgLoad.images.length + ' in total' );
 });
 imgLoad.on( 'done', ( instance ) => {
-  console.log('DONE  - all images have been successfully loaded');
+  console.log('DONE  - all successfully');
 });
 imgLoad.on( 'fail', ( instance ) => {
-  console.log('FAIL - all images loaded, at least one is broken');
+  console.log('FAIL - loaded, one more broken');
 });
 imgLoad.on( 'progress', ( instance, image ) => {
     if ( image.isLoaded ) {
         image.img.style.opacity = 1;
     } else {
         image.img.parentNode.style.backgroundColor = "#000";
-        image.img.parentNode.style.backgroundImage = "url('https://cdn-dynmedia-1.microsoft.com/is/content/microsoftcorp/1025082-card-grid-product-icons-card-ai-service-icon-color')";
+        image.img.parentNode.style.backgroundImage = "url('https://d1.awsstatic.com/nav/Documentation/Amazon%20EC2(1).55ac7ee73be34b4fa3aba610b7378902284d5f06.svg')";
     }
     const result = image.isLoaded ? 'loaded' : 'broken';
     console.log( '[' + result + '] ' + image.img.src );
