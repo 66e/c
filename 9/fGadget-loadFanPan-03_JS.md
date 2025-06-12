@@ -37,32 +37,38 @@ const createByExtens = (urlFile, fileExtens) => {
     }
 }
 
-const fetchCors = async (url, targetEl) => {
+const generateUnit = ( txtIn ) => {
+    const trgtContainer = document.querySelector("div#containErNT");
+    const unit = loadFan( txtIn );
+    trgtContainer.appendChild(unit);
+}
+
+const fetchCors = async (url, targetElm) => {
     const respons = await fetch(url);
     const docData = await respons.text();
-    targetEl.value = docData;
-    panLoadFan(docData);
+    targetElm.value = docData;
+    generateUnit ( docData );
 }
 
 const extractUrls = (input) => {
-// Search the input text for URLs (the regular expression pattern is taken from the excellent
-// "Regular Expressions Cookbook" by Jan Goyvaerts and Steven Levithan)
+    // Search the input text for URLs (the regular expression pattern is taken from the excellent
+    // "Regular Expressions Cookbook" by Jan Goyvaerts and Steven Levithan)
     const match = input.match(/\b((https?|ftp|file):\/\/|(www|ftp)\.)[-A-Z0-9+&@#\/%?=~_|$!:,.;]*[A-Z0-9+&@#\/%=~_|$]/ig);
 
-// Output the found URLs
-    return match ? match : "No URLs found";
+    // Output the found URLs
+    return match ? match.join("\n") : "No URLs found";
 }
 
-const panLoadFan = (input) => {
-    const urlS = extractUrls (input);
-    const unit = processElem(urlS);
-    jsPanel.create({
-        callback: (panel) => {
-            panel.content.appendChild(unit);
-        },
-        theme: 'primary',
-    });
-  return x + y;
+const loadFan = (input) => {
+    const urlSTxt = extractUrls (input);
+    const urlSArr = arrSpliter (urlSTxt, "\n");
+    const unit = processElem(urlSArr);
+    return unit;
+}
+
+const arrSpliter = (txtInpt, chrSplt) => {
+    const arrOutput = txtInpt.trim().split(chrSplt);
+    return arrOutput;
 }
 
 const jspanel_OL = () => {
@@ -78,7 +84,7 @@ const jspanel_OL = () => {
         });
         input.id = "input";
         input.size = 40;
-        const docUrl = 'https://66e.github.io/j/prideAndP.md';
+        const docUrl = 'https://66e.github.io/j/2025-06-08-y.md';
         input.value = docUrl;
         const btnRtrv = document.createElement("button");
         btnRtrv.addEventListener("click", () => {
@@ -91,13 +97,18 @@ const jspanel_OL = () => {
         checkbox.id = "checkbox";
         checkbox.type = "checkbox";
         const textarea = document.createElement("textarea");
-        textarea.addEventListener("change", () => {
-            
+        textarea.addEventListener("paste", () => {
+            setTimeout(() => {
+                generateUnit ( textarea.value );
+            }, 1);
         });
         textarea.id = "textarea";
         textarea.cols = "50";
         textarea.rows = "10";
         const btnRslv = document.createElement("button");
+        btnRslv.addEventListener("click", () => {
+            generateUnit ( textarea.value );
+        });
         btnRslv.textContent = "resolve";
         btnRslv.id = "btnRslv";
         
@@ -127,10 +138,20 @@ const jspanel_OL = () => {
 }
 
 const imagesloaded_OL = () => {
-    const unit = processElem();
+    const urlS = [
+        "https://7ed.net/bing/api?rand=true&size=1024x768", 
+        "https://picsum.photos/v2/list", 
+        "https://api.7ed.net/bing/api", 
+        "https://picsum.photos/536/354"
+    ];
+    const unit = processElem( urlS );
+    const div = document.createElement("div");
+    div.id = "containErNT";
+    div.appendChild(unit);
+
     jsPanel.create({
         callback: (panel) => {
-            panel.content.appendChild(unit);
+            panel.content.appendChild(div);
         },
         theme: 'primary',
     });
@@ -154,11 +175,12 @@ urlS.forEach((url) => {
     li.style.height = "70px";
     li.style.margin="2px 2px 2px 2px";
 
-    const img = new Image(100, 200);
+    const img = new Image();
     img.src = url;
     img.style.borderRadius="4px";
     img.style.opacity = 0;
     img.style.maxHeight = "70px";
+    img.style.minWidth = "40px";
     img.style.transition = "opacity 0.4s";
     img.addEventListener("click", (e) => {
         const crrntPrnt = e.currentTarget.parentNode;
@@ -182,23 +204,23 @@ imgLoad.on( 'always', ( instance ) => {
   console.log( imgLoad.images.length + ' in total' );
 });
 imgLoad.on( 'done', ( instance ) => {
-  console.log('DONE  - all images have been successfully loaded');
+  console.log('DONE  - all succes');
 });
 imgLoad.on( 'fail', ( instance ) => {
-  console.log('FAIL - all images loaded, at least one is broken');
+  console.log('FAIL - loaded, one mORe broken');
 });
 imgLoad.on( 'progress', ( instance, image ) => {
     if ( image.isLoaded ) {
         image.img.style.opacity = 1;
     } else {
-        image.img.parentNode.style.backgroundColor = "#f00";
+        image.img.parentNode.style.backgroundColor = "#DCDCDC";
         image.img.parentNode.style.backgroundImage = "url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/82/broken.png')";
     }
     const result = image.isLoaded ? 'loaded' : 'broken';
     console.log( '[' + result + '] ' + image.img.src );
 });
 
-div.id = "jspContainer";
+div.className  = "cntInner";
 return div;
 }
 
@@ -235,10 +257,10 @@ const preprocessPrecast = () => {
 		referElem[iterator].addEventListener("load", () => {
 			switch (elemId) {
 			case 'jspanel_min_js':
-				jspanel_OL();
+				jspanel_OL ();
 				break;
             case 'imagesloaded_pkgd_min_js':
-
+                imagesloaded_OL ();
 				break;
 			default:
 			}
