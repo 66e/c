@@ -37,11 +37,34 @@ const createByExtens = (urlFile, fileExtens) => {
     }
 }
 
-const fetchCors = async (url, targetEl) => {
+const fetchCors = async (url, targetElm) => {
     const respons = await fetch(url);
     const docData = await respons.text();
-    targetEl.value = docData;
-    console.log(docData);
+    targetElm.value = docData;
+    const trgtContainer = document.querySelector("div#containErNT");
+    const unit = loadFan( docData );
+    trgtContainer.appendChild(unit);
+}
+
+const extractUrls = ( input ) => {
+    // Search the input text for URLs (the regular expression pattern is taken from the excellent
+    // "Regular Expressions Cookbook" by Jan Goyvaerts and Steven Levithan)
+    const match = input.match(/\b((https?|ftp|file):\/\/|(www|ftp)\.)[-A-Z0-9+&@#\/%?=~_|$!:,.;]*[A-Z0-9+&@#\/%=~_|$]/ig);
+
+    // Output the found URLs
+    return match ? match.join("\n") : "No URLs found";
+}
+
+const loadFan = ( input ) => {
+    const urlSTxt = extractUrls (input);
+    const urlSArr = arrSpliter (urlSTxt, "\n");
+    const unit = processElem( urlSArr );
+    return unit;
+}
+
+const arrSpliter = (txtInpt, chrSplt) => {
+    const arrOutput = txtInpt.trim().split(chrSplt);
+    return arrOutput;
 }
 
 const jspanel_OL = () => {
@@ -57,7 +80,7 @@ const jspanel_OL = () => {
         });
         input.id = "input";
         input.size = 40;
-        const docUrl = 'https://66e.github.io/j/prideAndP.md';
+        const docUrl = 'https://66e.github.io/9/prideAndP.md';
         input.value = docUrl;
         const btnRtrv = document.createElement("button");
         btnRtrv.addEventListener("click", () => {
@@ -106,22 +129,25 @@ const jspanel_OL = () => {
 }
 
 const imagesloaded_OL = () => {
-    const unit = processElem();
+    const urlS = [
+        "https://7ed.net/bing/api?rand=true&size=1024x768", 
+        "https://picsum.photos/v2/list", 
+        "https://api.7ed.net/bing/api", 
+        "https://picsum.photos/536/354"
+    ];
+    const unit = processElem( urlS );
+    const div = document.createElement("div");
+    div.id = "containErNT";
+    div.appendChild(unit);
     jsPanel.create({
-    callback: (panel) => {
-        panel.content.appendChild(unit);
-    },
-    theme: 'primary',
-});
+        callback: (panel) => {
+            panel.content.appendChild(div);
+        },
+        theme: 'primary',
+    });
 }
 
-const processElem = () => {
-    const urlS = [
-    "https://7ed.net/bing/api?rand=true&size=1024x768", 
-    "https://picsum.photos/v2/list", 
-    "https://api.7ed.net/bing/api", 
-    "https://picsum.photos/536/354"
-    ];
+const processElem = (urlS) => {
     const objS = [];
     const div = document.createElement("div");
 
@@ -139,11 +165,12 @@ urlS.forEach((url) => {
     li.style.height = "70px";
     li.style.margin="2px 2px 2px 2px";
 
-    const img = new Image(100, 200);
+    const img = new Image();
     img.src = url;
     img.style.borderRadius="4px";
     img.style.opacity = 0;
     img.style.maxHeight = "70px";
+    img.style.minWidth = "35px";
     img.style.transition = "opacity 0.4s";
     img.addEventListener("click", (e) => {
         const crrntPrnt = e.currentTarget.parentNode;
@@ -166,23 +193,23 @@ imgLoad.on( 'always', ( instance ) => {
   console.log( imgLoad.images.length + ' in total' );
 });
 imgLoad.on( 'done', ( instance ) => {
-  console.log('DONE  - all images have been successfully loaded');
+  console.log('DONE  - all successful');
 });
 imgLoad.on( 'fail', ( instance ) => {
-  console.log('FAIL - all images loaded, at least one is broken');
+  console.log('FAIL - loaded, one more broken');
 });
 imgLoad.on( 'progress', ( instance, image ) => {
     if ( image.isLoaded ) {
         image.img.style.opacity = 1;
     } else {
-        image.img.parentNode.style.backgroundColor = "#000";
-        image.img.parentNode.style.backgroundImage = "url('https://cdn-dynmedia-1.microsoft.com/is/content/microsoftcorp/1025082-card-grid-product-icons-card-ai-service-icon-color')";
+        image.img.parentNode.style.backgroundColor = "#DCDCDC";
+        image.img.parentNode.style.backgroundImage = "url('https://fastly.jsdelivr.net/gh/microsoft/fluentui-system-icons/assets/Image%20Prohibited/SVG/ic_fluent_image_prohibited_24_filled.svg')";
     }
     const result = image.isLoaded ? 'loaded' : 'broken';
     console.log( '[' + result + '] ' + image.img.src );
 });
 
-div.id = "jspContainer";
+div.className = "cntInner";
 return div;
 }
 
