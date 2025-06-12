@@ -84,7 +84,7 @@ const jspanel_OL = () => {
         });
         input.id = "input";
         input.size = 40;
-        const docUrl = 'https://66e.github.io/j/2025-06-08-y.md';
+        const docUrl = 'https://66e.github.io/9/2025-06-08-y.md';
         input.value = docUrl;
         const btnRtrv = document.createElement("button");
         btnRtrv.addEventListener("click", () => {
