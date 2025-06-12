@@ -159,11 +159,12 @@ urlS.forEach((url) => {
     li.style.height = "70px";
     li.style.margin="2px 2px 2px 2px";
 
-    const img = new Image(100, 200);
+    const img = new Image();
     img.src = url;
     img.style.borderRadius="4px";
     img.style.opacity = 0;
     img.style.maxHeight = "70px";
+    img.style.minWidth = "70px";
     img.style.transition = "opacity 0.4s";
     img.addEventListener("click", (e) => {
         const crrntPrnt = e.currentTarget.parentNode;
@@ -196,8 +197,8 @@ imgLoad.on( 'progress', ( instance, image ) => {
     if ( image.isLoaded ) {
         image.img.style.opacity = 1;
     } else {
-        image.img.parentNode.style.backgroundColor = "#000";
-        image.img.parentNode.style.backgroundImage = "url('https://d1.awsstatic.com/nav/Documentation/Amazon%20EC2(1).55ac7ee73be34b4fa3aba610b7378902284d5f06.svg')";
+        image.img.parentNode.style.backgroundColor = "#DCDCDC";
+        image.img.parentNode.style.backgroundImage = "url('https://fastly.jsdelivr.net/gh/microsoft/fluentui-system-icons/assets/Image%20Prohibited/SVG/ic_fluent_image_prohibited_24_filled.svg')";
     }
     const result = image.isLoaded ? 'loaded' : 'broken';
     console.log( '[' + result + '] ' + image.img.src );
