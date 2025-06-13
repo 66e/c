@@ -57,7 +57,7 @@ const fetchCors = async ( url, targetElm ) => {
     const respons = await fetch(url);
     const docData = await respons.text();
     targetElm.value = docData;
-    panLoadFan(docData);
+    generateUnit( docData );
 }
 
 const extractUrls = ( input ) => {
@@ -72,7 +72,8 @@ const extractUrls = ( input ) => {
 const loadFan = ( input ) => {
     const urlSTxt = extractUrls (input);
     const urlSArr = arrSpliter (urlSTxt, "\n");
-    const unit = processElem(urlS);
+    const unit = processElem(urlSArr);
+    return unit;
 }
 
 const arrSpliter = ( txtInpt, chrSplt ) => {
@@ -156,6 +157,7 @@ const imagesloaded_OL = () => {
     const unit = processElem( urlS );
     const div = document.createElement("div");
     div.id = "containErNT";
+    div.appendChild(unit);
 
     jsPanel.create({
         callback: (panel) => {
