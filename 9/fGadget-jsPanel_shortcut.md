@@ -1,1 +1,1 @@
-<script src="https://66e.github.io/9/fGadget-loFaP_04_5_JS.md"></script>
+<script src="https://66e.github.io/9/fGadgetSLot-1_JS.md"></script>

@@ -2,6 +2,15 @@
 ```js
 */
 
+// ==UserScript==
+// @name         loFap
+// @namespace    https://bbs.tampermonkey.net.cn/
+// @version      0.4.6
+// @description  try to take over the world!
+// @author       You
+// @match        *://*/*
+// ==/UserScript==
+
 (() => {
     'use strict';
 
@@ -22,18 +31,34 @@ const appendRefer = (urlFile) => {
 
 const createByExtens = (urlFile, fileExtens) => {
     switch (fileExtens) {
-        case '.js':
-            const scriptRefer = document.createElement('script');
-            scriptRefer.src = urlFile;
-            return scriptRefer;
         case '.css':
             const linkRefer = document.createElement('link');
             linkRefer.href = urlFile;
             linkRefer.setAttribute('rel', 'stylesheet');
             return linkRefer;
+        case '.js':
+        case '.md':
+            const scriptRefer = document.createElement('script');
+            scriptRefer.src = urlFile;
+            return scriptRefer;
         default:
             console.log(fileExtens);
             break;
+    }
+}
+
+const generateUnit = (txtIn) => {
+    const trgtContainer = document.querySelector("div#containErNT");
+    const unit = loadFan(txtIn);
+    if (trgtContainer) {
+        trgtContainer.appendChild(unit);
+    } else {
+        jsPanel.create({
+            callback: (panel) => {
+                panel.content.appendChild(unit);
+            },
+            theme: 'primary',
+        });
     }
 }
 
@@ -41,9 +66,7 @@ const fetchCors = async (url, targetElm) => {
     const respons = await fetch(url);
     const docData = await respons.text();
     targetElm.value = docData;
-    const trgtContainer = document.querySelector("div#containErNT");
-    const unit = loadFan( docData );
-    trgtContainer.appendChild(unit);
+    generateUnit(docData);
 }
 
 const extractUrls = ( input ) => {
@@ -80,21 +103,23 @@ const jspanel_OL = () => {
         });
         input.id = "input";
         input.size = 40;
-        const docUrl = 'https://66e.github.io/9/prideAndP.md';
+        const docUrl = "https://66e.github.io/9/2025-06-08-y.md";
         input.value = docUrl;
         const btnRtrv = document.createElement("button");
+        btnRtrv.textContent = "retrieve";
+        btnRtrv.id = "btnRtrv";
         btnRtrv.addEventListener("click", () => {
             fetchCors(input.value, textarea);
         });
-        btnRtrv.textContent = "retrieve";
-        btnRtrv.id = "btnRtrv";
         const checkbox = document.createElement("input");
         checkbox.textContent = "checkbox";
         checkbox.id = "checkbox";
         checkbox.type = "checkbox";
         const textarea = document.createElement("textarea");
-        textarea.addEventListener("change", () => {
-            
+        textarea.addEventListener("paste", () => {
+            setTimeout(() => {
+                generateUnit (textarea.value);
+            }, 1);
         });
         textarea.id = "textarea";
         textarea.cols = "50";
@@ -102,6 +127,9 @@ const jspanel_OL = () => {
         const btnRslv = document.createElement("button");
         btnRslv.textContent = "resolve";
         btnRslv.id = "btnRslv";
+        btnRslv.addEventListener("click", () => {
+            generateUnit (textarea.value);
+        });
         
         const div = document.createElement("div");
         div.id = "dashboard";
@@ -139,6 +167,7 @@ const imagesloaded_OL = () => {
     const div = document.createElement("div");
     div.id = "containErNT";
     div.appendChild(unit);
+
     jsPanel.create({
         callback: (panel) => {
             panel.content.appendChild(div);
@@ -170,7 +199,7 @@ urlS.forEach((url) => {
     img.style.borderRadius="4px";
     img.style.opacity = 0;
     img.style.maxHeight = "70px";
-    img.style.minWidth = "35px";
+    img.style.minWidth = "25px";
     img.style.transition = "opacity 0.4s";
     img.addEventListener("click", (e) => {
         const crrntPrnt = e.currentTarget.parentNode;
@@ -184,6 +213,7 @@ urlS.forEach((url) => {
             }
         );
     });
+
     li.appendChild(img);
     div.appendChild(li);
 });
@@ -193,10 +223,10 @@ imgLoad.on( 'always', ( instance ) => {
   console.log( imgLoad.images.length + ' in total' );
 });
 imgLoad.on( 'done', ( instance ) => {
-  console.log('DONE  - all successful');
+  console.log('DONE  - all succes');
 });
 imgLoad.on( 'fail', ( instance ) => {
-  console.log('FAIL - loaded, one more broken');
+  console.log('FAIL - loaded, one mORe broken');
 });
 imgLoad.on( 'progress', ( instance, image ) => {
     if ( image.isLoaded ) {
@@ -230,11 +260,12 @@ const preprocessPrecast = () => {
     bar.appendChild(button);
 
     const referUrl = [
-        'https://jspanel.de/jspanel/dist/jspanel.min.css',
-        'https://jspanel.de/jspanel/dist/jspanel.min.js',
-        'https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js',
-        'https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.min.css',
-        'https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.min.js'
+        "https://jspanel.de/jspanel/dist/jspanel.min.css",
+        "https://jspanel.de/jspanel/dist/jspanel.min.js",
+        "https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js",
+        "https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.min.css",
+        "https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.min.js",
+        "https://66e.github.io/j/msn_JS.md",
     ];
     const checkbox = [];
     const referElem = [];
