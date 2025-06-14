@@ -40,7 +40,10 @@ const createByExtens = (urlFile, fileExtens) => {
 const generateUnit = ( txtIn ) => {
     const trgtContainer = document.querySelector("div#containErNT");
     const unit = loadFan( txtIn );
-    trgtContainer.appendChild(unit);
+    if (trgtContainer) {
+        trgtContainer.appendChild(unit);
+    }
+    
 }
 
 const fetchCors = async (url, targetElm) => {
@@ -111,6 +114,13 @@ const jspanel_OL = () => {
         });
         btnRslv.textContent = "resolve";
         btnRslv.id = "btnRslv";
+        const btnMsn = document.createElement("button");
+        btnMsn.textContent = "Msn";
+        btnMsn.id = "btnMsn";
+        btnMsn.addEventListener("click", () => {
+            const lngt = retrieveMsn();
+            generateUnit (lngt.join("\n"));
+        });
         
         const div = document.createElement("div");
         div.id = "dashboard";
@@ -119,6 +129,7 @@ const jspanel_OL = () => {
         div.appendChild(checkbox);
         div.appendChild(textarea);
         div.appendChild(btnRslv);
+        div.appendChild(btnMsn);
         return div;
     }
 
