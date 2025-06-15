@@ -2,6 +2,15 @@
 ```js
 */
 
+// ==UserScript==
+// @name         template
+// @namespace    https://bbs.tampermonkey.net.cn/
+// @version      0.1.0
+// @description  try to take over the world!
+// @author       You
+// @match        *://*/*
+// ==/UserScript==
+
 (() => {
     'use strict';
 
@@ -22,26 +31,42 @@ const appendRefer = (urlFile) => {
 
 const createByExtens = (urlFile, fileExtens) => {
     switch (fileExtens) {
-        case '.js':
-            const scriptRefer = document.createElement('script');
-            scriptRefer.src = urlFile;
-            return scriptRefer;
         case '.css':
             const linkRefer = document.createElement('link');
             linkRefer.href = urlFile;
             linkRefer.setAttribute('rel', 'stylesheet');
             return linkRefer;
+        case '.js':
+        case '.md':
+            const scriptRefer = document.createElement('script');
+            scriptRefer.src = urlFile;
+            return scriptRefer;
         default:
             console.log(fileExtens);
             break;
     }
 }
 
-const generateUnit = ( txtIn ) => {
+const geNEWin = (elem) => {
+    const div = document.createElement("div");
+    div.id = "containErNT";
+    div.appendChild(elem);
+
+    jsPanel.create({
+        callback: (panel) => {
+            panel.content.appendChild(div);
+        },
+        theme: 'primary',
+    });
+}
+
+const generateUnit = (txtIn) => {
     const trgtContainer = document.querySelector("div#containErNT");
-    const unit = loadFan( txtIn );
+    const unit = loadFan(txtIn);
     if (trgtContainer) {
         trgtContainer.appendChild(unit);
+    } else {
+        geNEWin(unit);
     }
     
 }
@@ -50,7 +75,7 @@ const fetchCors = async (url, targetElm) => {
     const respons = await fetch(url);
     const docData = await respons.text();
     targetElm.value = docData;
-    generateUnit ( docData );
+    generateUnit (docData);
 }
 
 const extractUrls = (input) => {
@@ -87,7 +112,7 @@ const jspanel_OL = () => {
         });
         input.id = "input";
         input.size = 40;
-        const docUrl = 'https://66e.github.io/9/2025-06-08-y.md';
+        const docUrl = "https://66e.github.io/9/2025-06-08-y.md";
         input.value = docUrl;
         const btnRtrv = document.createElement("button");
         btnRtrv.addEventListener("click", () => {
@@ -104,6 +129,9 @@ const jspanel_OL = () => {
             setTimeout(() => {
                 generateUnit ( textarea.value );
             }, 1);
+        });
+        textarea.addEventListener("dblclick", () => {
+            textarea.value = '';
         });
         textarea.id = "textarea";
         textarea.cols = "50";
@@ -155,17 +183,7 @@ const imagesloaded_OL = () => {
         "https://api.7ed.net/bing/api", 
         "https://picsum.photos/536/354"
     ];
-    const unit = processElem( urlS );
-    const div = document.createElement("div");
-    div.id = "containErNT";
-    div.appendChild(unit);
-
-    jsPanel.create({
-        callback: (panel) => {
-            panel.content.appendChild(div);
-        },
-        theme: 'primary',
-    });
+    generateUnit(urlS.join("\n"));
 }
 
 const processElem = (urlS) => {
@@ -191,7 +209,7 @@ urlS.forEach((url) => {
     img.style.borderRadius="4px";
     img.style.opacity = 0;
     img.style.maxHeight = "70px";
-    img.style.minWidth = "40px";
+    img.style.minWidth = "20px";
     img.style.transition = "opacity 0.4s";
     img.addEventListener("click", (e) => {
         const crrntPrnt = e.currentTarget.parentNode;
@@ -225,7 +243,7 @@ imgLoad.on( 'progress', ( instance, image ) => {
         image.img.style.opacity = 1;
     } else {
         image.img.parentNode.style.backgroundColor = "#DCDCDC";
-        image.img.parentNode.style.backgroundImage = "url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/82/broken.png')";
+        image.img.parentNode.style.backgroundImage = "url('https://fastly.jsdelivr.net/gh/microsoft/fluentui-system-icons/assets/Image%20Prohibited/SVG/ic_fluent_image_prohibited_24_filled.svg')";
     }
     const result = image.isLoaded ? 'loaded' : 'broken';
     console.log( '[' + result + '] ' + image.img.src );
@@ -252,11 +270,12 @@ const preprocessPrecast = () => {
     bar.appendChild(button);
 
     const referUrl = [
-        'https://jspanel.de/jspanel/dist/jspanel.min.css',
-        'https://jspanel.de/jspanel/dist/jspanel.min.js',
-        'https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js',
-        'https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.min.css',
-        'https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.min.js'
+        "https://jspanel.de/jspanel/dist/jspanel.min.css",
+        "https://jspanel.de/jspanel/dist/jspanel.min.js",
+        "https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js",
+        "https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.min.css",
+        "https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.min.js",
+        "https://66e.github.io/j/msn_JS.md",
     ];
     const checkbox = [];
     const referElem = [];
@@ -267,13 +286,13 @@ const preprocessPrecast = () => {
 		const elemId = referElem[iterator].id;
 		referElem[iterator].addEventListener("load", () => {
 			switch (elemId) {
-			case 'jspanel_min_js':
-				jspanel_OL ();
-				break;
-            case 'imagesloaded_pkgd_min_js':
-                imagesloaded_OL ();
-				break;
-			default:
+                case 'jspanel_min_js':
+                    jspanel_OL();
+                    break;
+                case 'imagesloaded_pkgd_min_js':
+                    imagesloaded_OL();
+                    break;
+                default:
 			}
 		});
 		document.documentElement.appendChild(referElem[iterator]);
