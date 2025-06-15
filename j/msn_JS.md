@@ -18,7 +18,10 @@ const retrieveMsn = () => {
 }
 
 setTimeout(() => {
-    console.log(retrieveMsn());
+    const cpArticle = document.querySelector("cp-article");
+    if (cpArticle) {
+        console.log(retrieveMsn());
+    }
 }, 300);
 
 /*
