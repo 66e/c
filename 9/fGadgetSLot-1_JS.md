@@ -47,26 +47,39 @@ const createByExtens = (urlFile, fileExtens) => {
     }
 }
 
-const generateUnit = (txtIn) => {
+const generateUnit = (arrIn) => {
     const trgtContainer = document.querySelector("div#containErNT");
-    const unit = loadFan(txtIn);
+    const unit = loadFan(arrIn);
     if (trgtContainer) {
         trgtContainer.appendChild(unit);
     } else {
-        jsPanel.create({
-            callback: (panel) => {
-                panel.content.appendChild(unit);
-            },
-            theme: 'primary',
-        });
+        geNEWin(unit);
     }
+}
+
+const geNEWin = (elem) => {
+    const div = document.createElement("div");
+    div.id = "containErNT";
+    div.appendChild(elem);
+
+    jsPanel.create({
+        callback: (panel) => {
+            panel.content.appendChild(div);
+        },
+        theme: 'primary',
+    });
+}
+
+const genGFormT = (txt) => {
+    const urlSArr = extractUrls(txt);
+    generateUnit(urlSArr);
 }
 
 const fetchCors = async (url, targetElm) => {
     const respons = await fetch(url);
     const docData = await respons.text();
     targetElm.value = docData;
-    generateUnit(docData);
+    genGFormT(docData);
 }
 
 const extractUrls = ( input ) => {
@@ -75,13 +88,11 @@ const extractUrls = ( input ) => {
     const match = input.match(/\b((https?|ftp|file):\/\/|(www|ftp)\.)[-A-Z0-9+&@#\/%?=~_|$!:,.;]*[A-Z0-9+&@#\/%=~_|$]/ig);
 
     // Output the found URLs
-    return match ? match.join("\n") : "No URLs found";
+    return match ? match : "No URLs found";
 }
 
-const loadFan = ( input ) => {
-    const urlSTxt = extractUrls (input);
-    const urlSArr = arrSpliter (urlSTxt, "\n");
-    const unit = processElem( urlSArr );
+const loadFan = (arrIn) => {
+    const unit = processElem(arrIn);
     return unit;
 }
 
@@ -106,30 +117,41 @@ const jspanel_OL = () => {
         const docUrl = "https://66e.github.io/9/2025-06-08-y.md";
         input.value = docUrl;
         const btnRtrv = document.createElement("button");
-        btnRtrv.textContent = "retrieve";
-        btnRtrv.id = "btnRtrv";
         btnRtrv.addEventListener("click", () => {
             fetchCors(input.value, textarea);
         });
+        btnRtrv.id = "btnRtrv";
+        btnRtrv.textContent = "retrieve";
         const checkbox = document.createElement("input");
         checkbox.textContent = "checkbox";
         checkbox.id = "checkbox";
         checkbox.type = "checkbox";
         const textarea = document.createElement("textarea");
+        textarea.addEventListener("dblclick", () => {
+            textarea.value = "";
+        });
         textarea.addEventListener("paste", () => {
             setTimeout(() => {
-                generateUnit (textarea.value);
+                genGFormT (textarea.value);
             }, 1);
         });
-        textarea.id = "textarea";
         textarea.cols = "50";
         textarea.rows = "10";
+        textarea.id = "textarea";
+        textarea.style.overflow = "auto";
         const btnRslv = document.createElement("button");
         btnRslv.textContent = "resolve";
         btnRslv.id = "btnRslv";
         btnRslv.addEventListener("click", () => {
             generateUnit (textarea.value);
         });
+        const btnMsn = document.createElement("button");
+        btnMsn.addEventListener("click", () => {
+            const lngt = retrieveMsn();
+            generateUnit ( lngt );
+        });
+        btnMsn.textContent = "Msn";
+        btnMsn.id = "btnMsn";
         
         const div = document.createElement("div");
         div.id = "dashboard";
@@ -138,6 +160,7 @@ const jspanel_OL = () => {
         div.appendChild(checkbox);
         div.appendChild(textarea);
         div.appendChild(btnRslv);
+        div.appendChild(btnMsn);
         return div;
     }
 
@@ -157,23 +180,41 @@ const jspanel_OL = () => {
 }
 
 const imagesloaded_OL = () => {
-    const urlS = [
+    const urlSArr = [
         "https://7ed.net/bing/api?rand=true&size=1024x768", 
         "https://picsum.photos/v2/list", 
         "https://api.7ed.net/bing/api", 
         "https://picsum.photos/536/354"
     ];
-    const unit = processElem( urlS );
-    const div = document.createElement("div");
-    div.id = "containErNT";
-    div.appendChild(unit);
+    generateUnit (urlSArr);
+}
 
-    jsPanel.create({
-        callback: (panel) => {
-            panel.content.appendChild(div);
-        },
-        theme: 'primary',
-    });
+const parseURL = ($string, param) => {
+    const __urlR = "((https?|ftp|file):\/\/|(www|ftp)\.)[-A-Z0-9+&@#\/%?=~_|$!:,.;]*[A-Z0-9+&@#\/%=~_|$]";
+    const __imgR = "\.(?:img|jpe?g|gif|png)";
+    const urlRegex = new RegExp(__urlR, "i");
+    const imgRegex = new RegExp(__imgR, "i");
+    const imgWURegex = new RegExp(__urlR + __imgR, "i");
+    const pRompt6Exe = /^\#6\/p\/\w+$/i;
+    const regTestStr = urlRegex.test($string);
+    if (regTestStr) {
+        switch (true) {
+            case imgRegex.test($string):
+                if (param) {
+                    const trimmed = $string.match(imgWURegex)[0];
+                    return trimmed;
+                }
+                return "img";
+                break;
+            
+            default:
+                return "a";
+        }
+    } else if (pRompt6Exe.test($string)) {
+        return "pRompt6Exe";
+    } else {
+        return "p";
+    }
 }
 
 const processElem = (urlS) => {
@@ -181,6 +222,7 @@ const processElem = (urlS) => {
     const div = document.createElement("div");
 
 urlS.forEach((url) => {
+    const srcTrim = parseURL(url, 0);
     objS.push({ src: url });
 
     const li = document.createElement("li");
@@ -188,15 +230,15 @@ urlS.forEach((url) => {
     li.style.backgroundImage = "url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/82/loading.gif')";
     li.style.backgroundPosition = "center center";
     li.style.backgroundRepeat = "no-repeat";
-    li.style.borderRadius="4px";
+    li.style.borderRadius = "4px";
     li.style.display = "block";
     li.style.float = "left";
     li.style.height = "70px";
-    li.style.margin="2px 2px 2px 2px";
+    li.style.margin = "2px 2px 2px 2px";
 
     const img = new Image();
     img.src = url;
-    img.style.borderRadius="4px";
+    img.style.borderRadius = "4px";
     img.style.opacity = 0;
     img.style.maxHeight = "70px";
     img.style.minWidth = "25px";
@@ -236,7 +278,7 @@ imgLoad.on( 'progress', ( instance, image ) => {
         image.img.parentNode.style.backgroundImage = "url('https://fastly.jsdelivr.net/gh/microsoft/fluentui-system-icons/assets/Image%20Prohibited/SVG/ic_fluent_image_prohibited_24_filled.svg')";
     }
     const result = image.isLoaded ? 'loaded' : 'broken';
-    console.log( '[' + result + '] ' + image.img.src );
+    console.log('[' + result + '] ' + image.img.src);
 });
 
 div.className = "cntInner";
@@ -277,10 +319,10 @@ const preprocessPrecast = () => {
 		referElem[iterator].addEventListener("load", () => {
 			switch (elemId) {
 			case 'jspanel_min_js':
-				jspanel_OL();
+				jspanel_OL ();
 				break;
             case 'imagesloaded_pkgd_min_js':
-				imagesloaded_OL();
+				imagesloaded_OL ();
 				break;
 			default:
 			}
