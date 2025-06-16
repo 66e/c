@@ -47,17 +47,39 @@ const createByExtens = ( urlFile, fileExtens ) => {
     }
 }
 
-const generateUnit = ( txtIn ) => {
+const generateUnit = (arrIn) => {
     const trgtContainer = document.querySelector("div#containErNT");
-    const unit = loadFan( txtIn );
-    trgtContainer.appendChild(unit);
+    const unit = loadFan(arrIn);
+    if (trgtContainer) {
+        trgtContainer.appendChild(unit);
+    } else {
+        geNEWin(unit);
+    }
+}
+
+const geNEWin = (elem) => {
+    const div = document.createElement("div");
+    div.id = "containErNT";
+    div.appendChild(elem);
+
+    jsPanel.create({
+        callback: (panel) => {
+            panel.content.appendChild(div);
+        },
+        theme: 'primary',
+    });
+}
+
+const genGFormT = (txt) => {
+    const urlSArr = extractUrls(txt);
+    generateUnit(urlSArr);
 }
 
 const fetchCors = async ( url, targetElm ) => {
     const respons = await fetch(url);
     const docData = await respons.text();
     targetElm.value = docData;
-    generateUnit( docData );
+    genGFormT(docData);
 }
 
 const extractUrls = ( input ) => {
@@ -66,13 +88,11 @@ const extractUrls = ( input ) => {
     const match = input.match(/\b((https?|ftp|file):\/\/|(www|ftp)\.)[-A-Z0-9+&@#\/%?=~_|$!:,.;]*[A-Z0-9+&@#\/%=~_|$]/ig);
 
     // Output the found URLs
-    return match ? match.join("\n") : "No URLs found";
+    return match ? match : "No URLs found";
 }
 
-const loadFan = ( input ) => {
-    const urlSTxt = extractUrls (input);
-    const urlSArr = arrSpliter (urlSTxt, "\n");
-    const unit = processElem(urlSArr);
+const loadFan = (arrIn) => {
+    const unit = processElem(arrIn);
     return unit;
 }
 
@@ -109,18 +129,29 @@ const jspanel_OL = () => {
         const textarea = document.createElement("textarea");
         textarea.addEventListener("paste", () => {
             setTimeout(() => {
-                generateUnit ( textarea.value );
+                genGFormT( textarea.value );
             }, 1);
+        });
+        textarea.addEventListener("dblclick", () => {
+            textarea.value = "";
         });
         textarea.id = "textarea";
         textarea.cols = "50";
         textarea.rows = "10";
+        textarea.style.overflow = "auto";
         const btnRslv = document.createElement("button");
         btnRslv.addEventListener("click", () => {
-            generateUnit ( textarea.value );
+            genGFormT( textarea.value );
         });
         btnRslv.textContent = "resolve";
         btnRslv.id = "btnRslv";
+        const btnMsn = document.createElement("button");
+        btnMsn.addEventListener("click", () => {
+            const lngt = retrieveMsn();
+            generateUnit ( lngt );
+        });
+        btnMsn.textContent = "Msn";
+        btnMsn.id = "btnMsn";
         
         const div = document.createElement("div");
         div.id = "dashboard";
@@ -148,23 +179,13 @@ const jspanel_OL = () => {
 }
 
 const imagesloaded_OL = () => {
-    const urlS = [
+    const urlSArr = [
         "https://7ed.net/bing/api?rand=true&size=1024x768", 
         "https://picsum.photos/v2/list", 
         "https://api.7ed.net/bing/api", 
         "https://picsum.photos/536/354"
     ];
-    const unit = processElem( urlS );
-    const div = document.createElement("div");
-    div.id = "containErNT";
-    div.appendChild(unit);
-
-    jsPanel.create({
-        callback: (panel) => {
-            panel.content.appendChild(div);
-        },
-        theme: 'primary',
-    });
+    generateUnit (urlSArr);
 }
 
 const processElem = ( urlS ) => {
@@ -179,7 +200,7 @@ urlS.forEach((url) => {
     li.style.backgroundImage = "url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/82/loading.gif')";
     li.style.backgroundPosition = "center center";
     li.style.backgroundRepeat = "no-repeat";
-    li.style.borderRadius="4px";
+    li.style.borderRadius = "4px";
     li.style.display = "block";
     li.style.float = "left";
     li.style.height = "70px";
@@ -187,10 +208,10 @@ urlS.forEach((url) => {
 
     const img = new Image();
     img.src = url;
-    img.style.borderRadius="4px";
+    img.style.borderRadius = "4px";
     img.style.opacity = 0;
     img.style.maxHeight = "70px";
-    img.style.minWidth = "30px";
+    img.style.minWidth = "25px";
     img.style.transition = "opacity 0.4s";
     img.addEventListener("click", (e) => {
         const crrntPrnt = e.currentTarget.parentNode;
@@ -227,7 +248,7 @@ imgLoad.on( 'progress', ( instance, image ) => {
         image.img.parentNode.style.backgroundImage = "url('https://fastly.jsdelivr.net/gh/microsoft/fluentui-system-icons/assets/Image%20Prohibited/SVG/ic_fluent_image_prohibited_24_filled.svg')";
     }
     const result = image.isLoaded ? 'loaded' : 'broken';
-    console.log( '[' + result + '] ' + image.img.src );
+    console.log('[' + result + '] ' + image.img.src);
 });
 
 div.className = "cntInner";
