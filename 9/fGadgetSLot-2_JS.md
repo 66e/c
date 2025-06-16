@@ -189,6 +189,15 @@ const imagesloaded_OL = () => {
     generateUnit (urlSArr);
 }
 
+const filterString = (strIn) => {
+    const currentStr = parseURL(strIn);
+    if (currentStr === "img") {
+        return parseURL(strIn, 1);
+    } else {
+        return strIn;
+    }
+}
+
 const parseURL = ($string, param) => {
     const __urlR = "((https?|ftp|file):\/\/|(www|ftp)\.)[-A-Z0-9+&@#\/%?=~_|$!:,.;]*[A-Z0-9+&@#\/%=~_|$]";
     const __imgR = "\.(?:img|jpe?g|gif|png)";
@@ -222,8 +231,8 @@ const processElem = (urlS) => {
     const div = document.createElement("div");
 
 urlS.forEach((url) => {
-    const srcTrim = parseURL(url, 0);
-    objS.push({ src: url });
+    const srcTrim = filterString(url);
+    objS.push({ src: srcTrim });
 
     const li = document.createElement("li");
     li.style.backgroundColor = "#000";
@@ -237,7 +246,7 @@ urlS.forEach((url) => {
     li.style.margin = "2px 2px 2px 2px";
 
     const img = new Image();
-    img.src = url;
+    img.src = srcTrim;
     img.style.borderRadius = "4px";
     img.style.opacity = 0;
     img.style.maxHeight = "70px";

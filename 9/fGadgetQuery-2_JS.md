@@ -68,14 +68,18 @@ const generateUnit = (txtIn) => {
     } else {
         geNEWin(unit);
     }
-    
+}
+
+const genGFormT = (txt) => {
+    const urlSArr = extractUrls(txt);
+    generateUnit(urlSArr);
 }
 
 const fetchCors = async (url, targetElm) => {
     const respons = await fetch(url);
     const docData = await respons.text();
     targetElm.value = docData;
-    generateUnit (docData);
+    genGFormT(docData);
 }
 
 const extractUrls = (input) => {
@@ -84,13 +88,11 @@ const extractUrls = (input) => {
     const match = input.match(/\b((https?|ftp|file):\/\/|(www|ftp)\.)[-A-Z0-9+&@#\/%?=~_|$!:,.;]*[A-Z0-9+&@#\/%=~_|$]/ig);
 
     // Output the found URLs
-    return match ? match.join("\n") : "No URLs found";
+    return match ? match : "No URLs found";
 }
 
-const loadFan = (input) => {
-    const urlSTxt = extractUrls (input);
-    const urlSArr = arrSpliter (urlSTxt, "\n");
-    const unit = processElem(urlSArr);
+const loadFan = (arrIn) => {
+    const unit = processElem(arrIn);
     return unit;
 }
 
@@ -127,18 +129,18 @@ const jspanel_OL = () => {
         const textarea = document.createElement("textarea");
         textarea.addEventListener("paste", () => {
             setTimeout(() => {
-                generateUnit ( textarea.value );
+                genGFormT ( textarea.value );
             }, 1);
         });
         textarea.addEventListener("dblclick", () => {
-            textarea.value = '';
+            textarea.value = "";
         });
         textarea.id = "textarea";
         textarea.cols = "50";
         textarea.rows = "10";
         const btnRslv = document.createElement("button");
         btnRslv.addEventListener("click", () => {
-            generateUnit ( textarea.value );
+            genGFormT ( textarea.value );
         });
         btnRslv.textContent = "resolve";
         btnRslv.id = "btnRslv";
@@ -147,7 +149,7 @@ const jspanel_OL = () => {
         btnMsn.id = "btnMsn";
         btnMsn.addEventListener("click", () => {
             const lngt = retrieveMsn();
-            generateUnit (lngt.join("\n"));
+            generateUnit (lngt);
         });
         
         const div = document.createElement("div");
@@ -177,13 +179,40 @@ const jspanel_OL = () => {
 }
 
 const imagesloaded_OL = () => {
-    const urlS = [
+    const urlSArr = [
         "https://7ed.net/bing/api?rand=true&size=1024x768", 
         "https://picsum.photos/v2/list", 
         "https://api.7ed.net/bing/api", 
         "https://picsum.photos/536/354"
     ];
-    generateUnit(urlS.join("\n"));
+    generateUnit(urlSArr);
+}
+
+const parseURL = ($string, param) => {
+    const __urlR = "((https?|ftp|file):\/\/|(www|ftp)\.)[-A-Z0-9+&@#\/%?=~_|$!:,.;]*[A-Z0-9+&@#\/%=~_|$]";
+    const __imgR = "\.(?:img|jpe?g|gif|png)";
+    const urlRegex = new RegExp(__urlR, "i");
+    const imgRegex = new RegExp(__imgR, "i");
+    const imgWURegex = new RegExp(__urlR + __imgR, "i");
+    const pRompt6Exe = /^\#6\/p\/\w+$/i;
+    const regTestStr = urlRegex.test($string);
+    if (regTestStr) {
+        switch (true) {
+            case imgRegex.test($string):
+                if (param) {
+                    const trimmed = $string.match(imgWURegex)[0];
+                    return trimmed;
+                }
+                return "img";
+                break;
+            default:
+                return "a";
+        }
+    } else if (pRompt6Exe.test($string)) {
+        return "pRompt6Exe";
+    } else {
+        return "p";
+    }
 }
 
 const processElem = (urlS) => {
@@ -198,18 +227,18 @@ urlS.forEach((url) => {
     li.style.backgroundImage = "url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/82/loading.gif')";
     li.style.backgroundPosition = "center center";
     li.style.backgroundRepeat = "no-repeat";
-    li.style.borderRadius="4px";
+    li.style.borderRadius = "4px";
     li.style.display = "block";
     li.style.float = "left";
     li.style.height = "70px";
-    li.style.margin="2px 2px 2px 2px";
+    li.style.margin = "2px 2px 2px 2px";
 
     const img = new Image();
     img.src = url;
-    img.style.borderRadius="4px";
+    img.style.borderRadius = "4px";
     img.style.opacity = 0;
     img.style.maxHeight = "70px";
-    img.style.minWidth = "20px";
+    img.style.minWidth = "25px";
     img.style.transition = "opacity 0.4s";
     img.addEventListener("click", (e) => {
         const crrntPrnt = e.currentTarget.parentNode;
