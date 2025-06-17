@@ -78,14 +78,25 @@ const genGFormT = (txt) => {
     generateUnit(urlSArr);
 }
 
+const resolveTxt = (txtInpt) => {
+    const paras = arrSpliter(txtInpt, ">　　　　　　　　");
+    const objS = [];
+    paras.forEach((elem) => {
+        const lines = arrSpliter(elem, "\n");
+        objS.push(lines);
+    });
+    return objS;
+}
+
 const fetchCors = async (url, targetElm) => {
     const respons = await fetch(url);
     const docData = await respons.text();
     targetElm.value = docData;
-    genGFormT(docData);
+    const number = resolveTxt(docData);
+    console.log(number);
 }
 
-const extractUrls = (txtIn) => {
+const extractUrls = (input) => {
     // Search the input text for URLs (the regular expression pattern is taken from the excellent
     // "Regular Expressions Cookbook" by Jan Goyvaerts and Steven Levithan)
     const match = input.match(/\b((https?|ftp|file):\/\/|(www|ftp)\.)[-A-Z0-9+&@#\/%?=~_|$!:,.;]*[A-Z0-9+&@#\/%=~_|$]/ig);
@@ -182,8 +193,7 @@ const jspanel_OL = () => {
 }
 
 const imagesloaded_OL = () => {
-    const msnArr = retrieveMsn();
-    generateUnit(msnArr);
+
 }
 
 const filterString = (strIn) => {
