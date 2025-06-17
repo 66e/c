@@ -3,7 +3,7 @@
 */
 
 // ==UserScript==
-// @name         template
+// @name         loFaP_0461-bO
 // @namespace    https://bbs.tampermonkey.net.cn/
 // @version      0.1.0
 // @description  try to take over the world!
@@ -47,6 +47,16 @@ const createByExtens = (urlFile, fileExtens) => {
     }
 }
 
+const generateUnit = (txtIn) => {
+    const trgtContainer = document.querySelector("div#containErNT");
+    const unit = loadFan(txtIn);
+    if (trgtContainer) {
+        trgtContainer.appendChild(unit);
+    } else {
+        geNEWin(unit);
+    }
+}
+
 const geNEWin = (elem) => {
     const div = document.createElement("div");
     div.id = "containErNT";
@@ -56,18 +66,11 @@ const geNEWin = (elem) => {
         callback: (panel) => {
             panel.content.appendChild(div);
         },
+        contentSize: '400 250',
+        opacity: 0.9,
+        position: 'right-top -10 125',
         theme: 'primary',
     });
-}
-
-const generateUnit = (txtIn) => {
-    const trgtContainer = document.querySelector("div#containErNT");
-    const unit = loadFan(txtIn);
-    if (trgtContainer) {
-        trgtContainer.appendChild(unit);
-    } else {
-        geNEWin(unit);
-    }
 }
 
 const genGFormT = (txt) => {
@@ -82,7 +85,7 @@ const fetchCors = async (url, targetElm) => {
     genGFormT(docData);
 }
 
-const extractUrls = (input) => {
+const extractUrls = (txtIn) => {
     // Search the input text for URLs (the regular expression pattern is taken from the excellent
     // "Regular Expressions Cookbook" by Jan Goyvaerts and Steven Levithan)
     const match = input.match(/\b((https?|ftp|file):\/\/|(www|ftp)\.)[-A-Z0-9+&@#\/%?=~_|$!:,.;]*[A-Z0-9+&@#\/%=~_|$]/ig);
@@ -120,24 +123,24 @@ const jspanel_OL = () => {
         btnRtrv.addEventListener("click", () => {
             fetchCors(input.value, textarea);
         });
-        btnRtrv.textContent = "retrieve";
         btnRtrv.id = "btnRtrv";
+        btnRtrv.textContent = "retrieve";
         const checkbox = document.createElement("input");
         checkbox.textContent = "checkbox";
         checkbox.id = "checkbox";
         checkbox.type = "checkbox";
         const textarea = document.createElement("textarea");
+        textarea.addEventListener("dblclick", () => {
+            textarea.value = "";
+        });
         textarea.addEventListener("paste", () => {
             setTimeout(() => {
                 genGFormT ( textarea.value );
             }, 1);
         });
-        textarea.addEventListener("dblclick", () => {
-            textarea.value = "";
-        });
-        textarea.id = "textarea";
         textarea.cols = "50";
         textarea.rows = "10";
+        textarea.id = "textarea";
         const btnRslv = document.createElement("button");
         btnRslv.addEventListener("click", () => {
             genGFormT ( textarea.value );
@@ -145,13 +148,12 @@ const jspanel_OL = () => {
         btnRslv.textContent = "resolve";
         btnRslv.id = "btnRslv";
         const btnMsn = document.createElement("button");
-        btnMsn.textContent = "Msn";
-        btnMsn.id = "btnMsn";
         btnMsn.addEventListener("click", () => {
-            const lngt = retrieveMsn();
-            generateUnit (lngt);
+            const msnArr = retrieveMsn();
+            generateUnit (msnArr);
         });
-        
+        btnMsn.id = "btnMsn";
+        btnMsn.textContent = "Msn";
         const div = document.createElement("div");
         div.id = "dashboard";
         div.appendChild(input);
@@ -168,24 +170,29 @@ const jspanel_OL = () => {
             const unit = visualizeComponentS();
             panel.content.appendChild(unit);
         },
-        contentSize: '500 300',
+        contentSize: '450 250',
         dragit: {
             snap: true,
         },
         headerTitle: 'dashboard',
-        position: 'left-top',
+        opacity: 0.9,
+        position: 'right-bottom -10 -10',
         theme: 'dark',
     });
 }
 
 const imagesloaded_OL = () => {
-    const urlSArr = [
-        "https://7ed.net/bing/api?rand=true&size=1024x768", 
-        "https://picsum.photos/v2/list", 
-        "https://api.7ed.net/bing/api", 
-        "https://picsum.photos/536/354"
-    ];
-    generateUnit(urlSArr);
+    const msnArr = retrieveMsn();
+    generateUnit(msnArr);
+}
+
+const filterString = (strIn) => {
+    const currentStr = parseURL(strIn);
+    if (currentStr === "img") {
+        return parseURL(strIn, 1);
+    } else {
+        return strIn;
+    }
 }
 
 const parseURL = ($string, param) => {
@@ -205,6 +212,7 @@ const parseURL = ($string, param) => {
                 }
                 return "img";
                 break;
+
             default:
                 return "a";
         }
@@ -220,7 +228,8 @@ const processElem = (urlS) => {
     const div = document.createElement("div");
 
 urlS.forEach((url) => {
-    objS.push({ src: url });
+    const srcTrim = filterString(url);
+    objS.push({ src: srcTrim });
     
     const li = document.createElement("li");
     li.style.backgroundColor = "#000";
@@ -234,7 +243,7 @@ urlS.forEach((url) => {
     li.style.margin = "2px 2px 2px 2px";
 
     const img = new Image();
-    img.src = url;
+    img.src = srcTrim;
     img.style.borderRadius = "4px";
     img.style.opacity = 0;
     img.style.maxHeight = "70px";
@@ -275,10 +284,10 @@ imgLoad.on( 'progress', ( instance, image ) => {
         image.img.parentNode.style.backgroundImage = "url('https://fastly.jsdelivr.net/gh/microsoft/fluentui-system-icons/assets/Image%20Prohibited/SVG/ic_fluent_image_prohibited_24_filled.svg')";
     }
     const result = image.isLoaded ? 'loaded' : 'broken';
-    console.log( '[' + result + '] ' + image.img.src );
+    console.log('[' + result + '] ' + image.img.src);
 });
 
-div.className  = "cntInner";
+div.className = "cntInner";
 return div;
 }
 
