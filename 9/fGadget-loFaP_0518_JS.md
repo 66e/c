@@ -78,12 +78,17 @@ const genGFormT = (txt) => {
     generateUnit(urlSArr);
 }
 
-const resolveTxt = (x, y) => {
+const resolveTxt = (txtInpt) => {
     const paras = arrSpliter(txtInpt, ">　　　　　　　　");
     const objS = [];
     paras.forEach((elem) => {
         const lines = arrSpliter(elem, "\n");
-        objS.push(lines);
+        const innerObj = [];
+        lines.forEach((el) => {
+            const identify = parseURL(el);
+            innerObj.push(identify);
+        });
+        objS.push(innerObj);
     });
     return objS;
 }
