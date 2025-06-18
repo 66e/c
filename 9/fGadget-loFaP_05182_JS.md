@@ -81,16 +81,21 @@ const genGFormT = (txt) => {
 const resolveTxt = (txtInpt) => {
     const paras = arrSpliter(txtInpt, ">　　　　　　　　");
     const objS = [];
+    const div = document.createElement("div");
     paras.forEach((elem) => {
         const lines = arrSpliter(elem, "\n");
         const innerObj = [];
+        const innerDiv = document.createElement("div");
         lines.forEach((el) => {
             const identify = parseURL(el);
+            const iter = filterString(el);
             innerObj.push(identify);
+            innerDiv.appendChild(iter);
         });
         objS.push(innerObj);
+        div.appendChild(innerDiv);
     });
-    return objS;
+    return [div, objS];
 }
 
 const fetchCors = async ( url, targetElm ) => {
@@ -98,6 +103,8 @@ const fetchCors = async ( url, targetElm ) => {
     const docData = await respons.text();
     targetElm.value = docData;
     const iterable = resolveTxt(docData);
+    const trgtContainer = document.querySelector("div#containErNT");
+    trgtContainer.appendChild(iterable[0]);
     console.log(iterable);
 }
 
@@ -220,10 +227,28 @@ const imagesloaded_OL = () => {
 
 const filterString = (strIn) => {
     const currentStr = parseURL(strIn);
-    if (currentStr === "img") {
-        return parseURL(strIn, 1);
-    } else {
-        return strIn;
+    switch (currentStr) {
+        case "a":
+            const aTag = document.createElement("a");
+            aTag.textContent = strIn;
+            return aTag;
+            break;
+        case "img":
+            const img = new Image();
+            img.src = parseURL(strIn, 1);
+            return img;
+        case "p":
+            const pTag = document.createElement("p");
+            pTag.textContent = strIn;
+            return pTag;
+            break;
+        case "pRompt6Exe":
+            const div = document.createElement("div");
+            div.textContent = strIn;
+            return div;
+            break;
+        default:
+        console.log("default");
     }
 }
 
