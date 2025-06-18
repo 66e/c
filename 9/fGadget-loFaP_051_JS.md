@@ -15,9 +15,23 @@
     'use strict';
 
 const uniqueLauncher = () => {
-    const triggerExist = document.querySelector('div#triggerField');
+    const triggerExist = document.querySelector("div#triggerField");
     triggerExist === null ? preprocessPrecast() :
-    console.log('already entity');
+    console.log("already entity");
+}
+
+const referShell = () => {
+    if (typeof retrieveMsn === "function") {
+        const arrMsn = retrieveMsn();
+        console.log(arrMsn);
+    } else {
+        const elem = appendRefer("https://66e.github.io/j/msn_JS.md");
+        elem.addEventListener("load", () => {
+            const arrMsn = retrieveMsn();
+            console.log(arrMsn);
+        });
+        document.documentElement.appendChild(elem);
+    }
 }
 
 const appendRefer = (urlFile) => {
