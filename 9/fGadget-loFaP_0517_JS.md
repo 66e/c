@@ -3,9 +3,9 @@
 */
 
 // ==UserScript==
-// @name         loFaP
+// @name         loFaP_0517
 // @namespace    https://bbs.tampermonkey.net.cn/
-// @version      0.1.0
+// @version      0.5.1
 // @description  try to take over the world!
 // @author       You
 // @match        *://*/*
@@ -66,6 +66,9 @@ const geNEWin = (elem) => {
         callback: (panel) => {
             panel.content.appendChild(div);
         },
+        contentSize: '400 250',
+        opacity: 0.9,
+        position: 'right-top -10 125',
         theme: 'primary',
     });
 }
@@ -75,11 +78,22 @@ const genGFormT = (txt) => {
     generateUnit(urlSArr);
 }
 
+const resolveTxt = (x, y) => {
+    const paras = arrSpliter(txtInpt, ">　　　　　　　　");
+    const objS = [];
+    paras.forEach((elem) => {
+        const lines = arrSpliter(elem, "\n");
+        objS.push(lines);
+    });
+    return objS;
+}
+
 const fetchCors = async ( url, targetElm ) => {
     const respons = await fetch(url);
     const docData = await respons.text();
     targetElm.value = docData;
-    genGFormT(docData);
+    const iterable = resolveTxt(docData);
+    console.log(iterable);
 }
 
 const extractUrls = ( input ) => {
@@ -99,6 +113,20 @@ const loadFan = (arrIn) => {
 const arrSpliter = ( txtInpt, chrSplt ) => {
     const arrOutput = txtInpt.trim().split(chrSplt);
     return arrOutput;
+}
+
+const rEFerfUse = () => {
+    if (typeof retrieveMsn === "function") {
+        const arrMsn = retrieveMsn();
+        generateUnit ( arrMsn );
+    } else {
+        const msn_JS = appendRefer("https://66e.github.io/j/msn_JS.md");
+        msn_JS.addEventListener("load", () => {
+            const arrMsn = retrieveMsn();
+            generateUnit ( arrMsn );
+        });
+        document.documentElement.appendChild(msn_JS);
+    }
 }
 
 const jspanel_OL = () => {
@@ -147,8 +175,7 @@ const jspanel_OL = () => {
         btnRslv.id = "btnRslv";
         const btnMsn = document.createElement("button");
         btnMsn.addEventListener("click", () => {
-            const lngt = retrieveMsn();
-            generateUnit ( lngt );
+            rEFerfUse();
         });
         btnMsn.textContent = "Msn";
         btnMsn.id = "btnMsn";
@@ -160,6 +187,7 @@ const jspanel_OL = () => {
         div.appendChild(checkbox);
         div.appendChild(textarea);
         div.appendChild(btnRslv);
+        div.appendChild(btnMsn);
         return div;
     }
 
@@ -168,12 +196,9 @@ const jspanel_OL = () => {
             const unit = visualizeComponentS();
             panel.content.appendChild(unit);
         },
-        contentSize: '500 300',
-        dragit: {
-            snap: true,
-        },
+        contentSize: '450 250',
         headerTitle: 'dashboard',
-        position: 'left-top',
+        position: 'right-bottom -10 -10',
         theme: 'dark',
     });
 }
@@ -186,6 +211,43 @@ const imagesloaded_OL = () => {
         "https://picsum.photos/536/354"
     ];
     generateUnit (urlSArr);
+}
+
+const filterString = (strIn) => {
+    const currentStr = parseURL(strIn);
+    if (currentStr === "img") {
+        return parseURL(strIn, 1);
+    } else {
+        return strIn;
+    }
+}
+
+const parseURL = ($string, param) => {
+    const __urlR = "((https?|ftp|file):\/\/|(www|ftp)\.)[-A-Z0-9+&@#\/%?=~_|$!:,.;]*[A-Z0-9+&@#\/%=~_|$]";
+    const __imgR = "\.(?:img|jpe?g|gif|png)";
+    const urlRegex = new RegExp(__urlR, "i");
+    const imgRegex = new RegExp(__imgR, "i");
+    const imgWURegex = new RegExp(__urlR + __imgR, "i");
+    const pRompt6Exe = /^\#6\/p\/\w+$/i;
+    const regTestStr = urlRegex.test($string);
+    if (regTestStr) {
+        switch (true) {
+            case imgRegex.test($string):
+                if (param) {
+                    const trimmed = $string.match(imgWURegex)[0];
+                    return trimmed;
+                }
+                return "img";
+                break;
+
+            default:
+                return "a";
+        }
+    } else if (pRompt6Exe.test($string)) {
+        return "pRompt6Exe";
+    } else {
+        return "p";
+    }
 }
 
 const processElem = ( urlS ) => {
@@ -204,7 +266,7 @@ urlS.forEach((url) => {
     li.style.display = "block";
     li.style.float = "left";
     li.style.height = "70px";
-    li.style.margin="2px 2px 2px 2px";
+    li.style.margin = "2px 2px 2px 2px";
 
     const img = new Image();
     img.src = url;
@@ -277,7 +339,6 @@ const preprocessPrecast = () => {
         "https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js",
         "https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.min.css",
         "https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.min.js",
-        "https://66e.github.io/j/msn_JS.md",
     ];
     const checkbox = [];
     const referElem = [];
@@ -288,13 +349,13 @@ const preprocessPrecast = () => {
 		const elemId = referElem[iterator].id;
 		referElem[iterator].addEventListener("load", () => {
 			switch (elemId) {
-			case 'jspanel_min_js':
-				jspanel_OL ();
-				break;
-            case 'imagesloaded_pkgd_min_js':
-				imagesloaded_OL ();
-				break;
-			default:
+                case 'jspanel_min_js':
+                    jspanel_OL ();
+                    break;
+                case 'imagesloaded_pkgd_min_js':
+                    imagesloaded_OL ();
+                    break;
+                default:
 			}
 		});
 		document.documentElement.appendChild(referElem[iterator]);
