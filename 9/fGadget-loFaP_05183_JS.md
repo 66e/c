@@ -109,20 +109,32 @@ const createMould = ({
 
 const resolveTxt = (txtInpt) => {
     const paras = arrSpliter(txtInpt, ">　　　　　　　　");
+    const div = document.createElement("div");
     const objS = [];
     paras.forEach((elem) => {
         const lines = arrSpliter(elem, "\n");
-        objS.push(lines);
+        const innerObj = [];
+        const innerDiv = document.createElement("div");
+        lines.forEach((el) => {
+            const identify = parseURL(el);
+            const iter = filterString(el);
+            innerObj.push(identify);
+            innerDiv.appendChild(iter);
+        });
+        div.appendChild(innerDiv);
+        objS.push(innerObj);
     });
-    return objS;
+    return [div, objS];
 }
 
 const fetchCors = async (url, targetElm) => {
     const respons = await fetch(url);
     const docData = await respons.text();
     targetElm.value = docData;
-    const number = resolveTxt(docData);
-    console.log(number);
+    const unit = resolveTxt(docData);
+    const trgtContainer = document.querySelector("div#containErNT");
+    trgtContainer.appendChild(unit[0]);
+    console.log(unit[1]);
 }
 
 const extractUrls = (input) => {
@@ -142,6 +154,20 @@ const loadFan = (arrIn) => {
 const arrSpliter = (txtInpt, chrSplt) => {
     const arrOutput = txtInpt.trim().split(chrSplt);
     return arrOutput;
+}
+
+const rEFerfUse = () => {
+    if (typeof retrieveMsn === "function") {
+        const arrMsn = retrieveMsn();
+        generateUnit ( arrMsn );
+    } else {
+        const msn_JS = appendRefer("https://66e.github.io/j/msn_JS.md");
+        msn_JS.addEventListener("load", () => {
+            const arrMsn = retrieveMsn();
+            generateUnit ( arrMsn );
+        });
+        document.documentElement.appendChild(msn_JS);
+    }
 }
 
 const jspanel_OL = () => {
@@ -178,19 +204,19 @@ const jspanel_OL = () => {
                 genGFormT ( textarea.value );
             }, 1);
         });
+        textarea.id = "textarea";
         textarea.cols = "50";
         textarea.rows = "10";
-        textarea.id = "textarea";
+        textarea.style.overflow = "auto";
         const btnRslv = document.createElement("button");
         btnRslv.addEventListener("click", () => {
             genGFormT ( textarea.value );
         });
-        btnRslv.textContent = "resolve";
         btnRslv.id = "btnRslv";
+        btnRslv.textContent = "resolve";
         const btnMsn = document.createElement("button");
         btnMsn.addEventListener("click", () => {
-            const msnArr = retrieveMsn();
-            generateUnit (msnArr);
+            rEFerfUse ();
         });
         btnMsn.id = "btnMsn";
         btnMsn.textContent = "Msn";
@@ -211,9 +237,6 @@ const jspanel_OL = () => {
             panel.content.appendChild(unit);
         },
         contentSize: '450 250',
-        dragit: {
-            snap: true,
-        },
         headerTitle: 'dashboard',
         opacity: 0.9,
         position: 'right-bottom -10 -10',
@@ -227,10 +250,28 @@ const imagesloaded_OL = () => {
 
 const filterString = (strIn) => {
     const currentStr = parseURL(strIn);
-    if (currentStr === "img") {
-        return parseURL(strIn, 1);
-    } else {
-        return strIn;
+    switch (currentStr) {
+        case "a":
+            const aTag = document.createElement("a");
+            aTag.textContent = strIn;
+            return aTag;
+            break;
+        case "img":
+            const img = new Image();
+            img.src = parseURL(strIn, 1);
+            return img;
+        case "p":
+            const pTag = document.createElement("p");
+            pTag.textContent = strIn;
+            return pTag;
+            break;
+        case "pRompt6Exe":
+            const div = document.createElement("div");
+            div.textContent = strIn;
+            return div;
+            break;
+        default:
+        console.log("default");
     }
 }
 
@@ -310,7 +351,7 @@ imgLoad.on( 'always', ( instance ) => {
   console.log( imgLoad.images.length + ' in total' );
 });
 imgLoad.on( 'done', ( instance ) => {
-  console.log('DONE  - all succes');
+  console.log('DONE  - all success');
 });
 imgLoad.on( 'fail', ( instance ) => {
   console.log('FAIL - loaded, one mORe broken');
@@ -352,7 +393,6 @@ const preprocessPrecast = () => {
         "https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js",
         "https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.min.css",
         "https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.min.js",
-        "https://66e.github.io/j/msn_JS.md",
     ];
     const checkbox = [];
     const referElem = [];
