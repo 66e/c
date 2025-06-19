@@ -20,6 +20,10 @@ node.parentNode
 
 console.log(typeof undeclaredVariable);
 
+Dog.prototype.toString = function dogToString() {
+  return `${this.name}`;
+};
+
 undefined
 
 document.body.appendChild(p);

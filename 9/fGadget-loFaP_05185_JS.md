@@ -300,14 +300,15 @@ const createImgLoad = (url) => {
     img.style.minWidth = "25px";
     img.style.transition = "opacity 0.4s";
     img.addEventListener("click", (e) => {
-        const crrntPrnt = e.currentTarget.parentNode.parentNode;
-        const matches = document.querySelectorAll("img");
+        const crrntTrgt = e.currentTarget;
+        const crrntGrnd = e.currentTarget.parentNode.parentNode.parentNode;
+        const matches = document.querySelectorAll("li > img");
         const objS = new Array();
         matches.forEach((el) => {
             objS.push({ src: el.src });
         });
 
-        const galIdx = [].indexOf.call(crrntPrnt.parentNode.childNodes, crrntPrnt);
+        const galIdx = [].indexOf.call(matches, crrntTrgt);
         new Fancybox(
             // Array containing gallery items
             objS,
