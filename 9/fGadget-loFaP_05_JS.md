@@ -47,9 +47,9 @@ const createByExtens = (urlFile, fileExtens) => {
     }
 }
 
-const generateUnit = (txtIn) => {
+const generateUnit = (arrIn) => {
     const trgtContainer = document.querySelector("div#containErNT");
-    const unit = loadFan(txtIn);
+    const unit = loadFan(arrIn);
     if (trgtContainer) {
         trgtContainer.appendChild(unit);
     } else {
@@ -76,6 +76,23 @@ const geNEWin = (elem) => {
 const genGFormT = (txt) => {
     const urlSArr = extractUrls(txt);
     generateUnit(urlSArr);
+}
+
+const createMould = ({
+    tagN,
+    textC,
+    src,
+    href: 'primary',
+    className : 'primary',
+    id: 'primary',
+    position: 'primary',
+    theme: 'primary',
+}) => {
+    const tagName = document.createElement(tagName);
+    tagName.textContent = textC;
+    tagName.src = src;
+    tagName.href = src;
+    return tagName;
 }
 
 const resolveTxt = (txtInpt) => {
