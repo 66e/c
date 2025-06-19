@@ -89,6 +89,7 @@ const resolveTxt = (txtInpt) => {
         lines.forEach((el) => {
             const identify = parseURL(el);
             const iter = filterString(el);
+            imgLoadProgress ( iter );
             innerObj.push(identify);
             innerDiv.appendChild(iter);
         });
@@ -234,9 +235,8 @@ const filterString = (strIn) => {
             return aTag;
             break;
         case "img":
-            const img = new Image();
-            img.src = parseURL(strIn, 1);
-            return img;
+            const imgL = createImgLoad(strIn);
+            return imgL;
         case "p":
             const pTag = document.createElement("p");
             pTag.textContent = strIn;
@@ -280,13 +280,7 @@ const parseURL = ($string, param) => {
     }
 }
 
-const processElem = ( urlS ) => {
-    const objS = [];
-    const div = document.createElement("div");
-
-urlS.forEach((url) => {
-    objS.push({ src: url });
-
+const createImgLoad = (url) => {
     const li = document.createElement("li");
     li.style.backgroundColor = "#000";
     li.style.backgroundImage = "url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/82/loading.gif')";
@@ -306,7 +300,13 @@ urlS.forEach((url) => {
     img.style.minWidth = "25px";
     img.style.transition = "opacity 0.4s";
     img.addEventListener("click", (e) => {
-        const crrntPrnt = e.currentTarget.parentNode;
+        const crrntPrnt = e.currentTarget.parentNode.parentNode;
+        const matches = document.querySelectorAll("img");
+        const objS = new Array();
+        matches.forEach((el) => {
+            objS.push({ src: el.src });
+        });
+
         const galIdx = [].indexOf.call(crrntPrnt.parentNode.childNodes, crrntPrnt);
         new Fancybox(
             // Array containing gallery items
@@ -319,10 +319,11 @@ urlS.forEach((url) => {
     });
 
     li.appendChild(img);
-    div.appendChild(li);
-});
+    return li;
+}
 
-const imgLoad = imagesLoaded( div );
+const imgLoadProgress = ( elem ) => {
+    const imgLoad = imagesLoaded( elem );
 imgLoad.on( 'always', ( instance ) => {
   console.log( imgLoad.images.length + ' in total' );
 });
@@ -342,6 +343,20 @@ imgLoad.on( 'progress', ( instance, image ) => {
     const result = image.isLoaded ? 'loaded' : 'broken';
     console.log('[' + result + '] ' + image.img.src);
 });
+}
+
+const processElem = ( urlS ) => {
+    const objS = [];
+    const div = document.createElement("div");
+
+urlS.forEach((url) => {
+    objS.push({ src: url });
+
+    const liImg = createImgLoad(url);
+    div.appendChild(liImg);
+});
+
+
 
 div.className = "cntInner";
 return div;

@@ -6,6 +6,18 @@ const c = "";
 let l = '';
 var v = `${c} 小于 ${l}`;
 
+const el = document.querySelector("div.user-panel.main input[name='login']");
+const matches = container.querySelectorAll("li[data-active='1']");
+
+const fruits = [];
+const arrayEmpty = new Array();
+
+arraySparse.forEach((element) => {
+  console.log({ element });
+});
+
+node.parentNode
+
 console.log(typeof undeclaredVariable);
 
 undefined
