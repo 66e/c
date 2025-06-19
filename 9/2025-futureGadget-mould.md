@@ -8,23 +8,25 @@ var v = `${c} 小于 ${l}`;
 
 console.log(typeof undeclaredVariable);
 
+undefined
+
 document.body.appendChild(p);
 
-if (a > 0) {
+if ( true ) {
     result = "positive";
 } else {
     result = "NOT positive";
 }
 
 const func2 = (x, y) => {
-    return 0;
+    return false;
 }
 
 let newDiv = document.createElement("div");
 newDiv.textContent = "This text is different!";
 
-window.addEventListener("load", (event) => {
-  log.textContent += "load\n";
+my_element.addEventListener("click", () => {
+    
 });
 
 switch (foo) {

@@ -79,20 +79,32 @@ const genGFormT = (txt) => {
 }
 
 const createMould = ({
-    tagN,
-    textC,
+    className,
+    click,
+    href,
+    id,
+    localName,
+    textContent,
     src,
-    href: 'primary',
-    className : 'primary',
-    id: 'primary',
-    position: 'primary',
-    theme: 'primary',
 }) => {
-    const tagName = document.createElement(tagName);
-    tagName.textContent = textC;
-    tagName.src = src;
-    tagName.href = src;
-    return tagName;
+    const tag = document.createElement(localName);
+    switch (true) {
+        case click !== undefined:
+            tag.addEventListener(click || "click", () => {
+                
+            });
+        case className !== undefined:
+            tag.className = className;
+        case href !== undefined:
+            tag.href = href;
+        case id !== undefined:
+            tag.id = id;
+        case textContent !== undefined:
+            tag.textContent = textContent;
+        case src !== undefined:
+            tag.src = src;
+    }
+    return tag;
 }
 
 const resolveTxt = (txtInpt) => {
