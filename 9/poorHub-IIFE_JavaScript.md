@@ -2,8 +2,9 @@
 ```js
 */
 
-document.addEventListener("readystatechange", (event) => {
-    const button = document.createElement('button');
+(function(){
+  // 创建按钮
+  const button = document.createElement('button');
   button.className = 'sec_btn';
   button.innerText = 'Add to feature vector';
   button.onclick = toggleMenu;
@@ -105,7 +106,7 @@ document.addEventListener("readystatechange", (event) => {
       goToMenu(0);
     }
   });
-});
+})();
 
 /*
 ```
