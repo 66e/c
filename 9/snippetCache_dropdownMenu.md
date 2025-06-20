@@ -1,7 +1,3 @@
-/*
-```js
-*/
-
 <div class="flexDiv">
   <button class="sec_btn" onclick="openMulti();">Add to feature vector</button>
   <div class="selectWrapper">
@@ -221,7 +217,3 @@ function resetAllMenus() {
 }
 
 </script>
-
-/*
-```
-*/
