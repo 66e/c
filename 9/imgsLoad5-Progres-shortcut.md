@@ -1,1 +1,0 @@
-<script src="https://66e.github.io/9/imgsLoad5-Progres_js.md"></script>
