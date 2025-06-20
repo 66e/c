@@ -65,8 +65,8 @@ body {
   border-radius: calc(var(--sizeVar) / 2);
   position: absolute;
   width: auto;
-  left: 400px;
-  top: 150px;
+  left: 0;
+  right: 0;
   overflow: hidden;
   background: #ffffff;
   transition: transform 300ms ease-in-out 0s, clip-path 300ms ease-in-out 0s;
@@ -126,9 +126,6 @@ body {
 }
 .sec_btn {
   --bgColor: #869cff;
-  bottom: 3px;
-  position: fixed;
-  right: 3px;
 }
 button {
   font-family: "Roboto", sans-serif;
