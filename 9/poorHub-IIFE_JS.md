@@ -136,8 +136,12 @@
     }
   }
   function goToMenu(index) {
-    const width = scrollContainer.clientWidth;
-    scrollContainer.scrollTo({ left: width * index, behavior: 'smooth' });
+  // 确保显示
+  wrapper.style.opacity = '1';
+  wrapper.style.pointerEvents = 'all';
+  // 取容器实际宽度
+  const width = scrollContainer.getBoundingClientRect().width;
+  scrollContainer.scrollLeft = width * index;
   }
   function selectItem(name) {
     alert(`Selected: ${name}`);
