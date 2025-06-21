@@ -1,6 +1,14 @@
 /*
 ```js
 */
+console.log('it works!');
+/*
+```
+*/
+
+/*
+```js
+*/
 
 const c = "";
 let l = '';

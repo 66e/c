@@ -47,7 +47,7 @@ body {
 .scrollContainer {
   display: flex;
   width: 100%;
-  overflow-x: hidden;
+  overflow-x: auto;
   scroll-behavior: smooth;
 }
 .multiSelect {
