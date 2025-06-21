@@ -1,216 +1,182 @@
-<div class="flexDiv">
-  <button class="sec_btn" onclick="openMulti();">Add to feature vector</button>
-  <div class="selectWrapper">
-    <div class="multiSelect" id="menu-0">
-      <div class="bottomBorder">New feature vector</div>
-      <div onclick="openMulti();">Vector_01</div>
-      <div onclick="openMulti();">myVector</div>
-      <div onclick="openMulti();">featureVector</div>
-      <div class="topBorder iconDiv" onclick="nextMenu(event);">Other projects<i class="material-icons">arrow_right</i></div>
-    </div>
-    <div class="multiSelect" id="menu-1">
-      <div class="bottomBorder iconDiv noSpace narrow placeholder"><i class="material-icons">search</i>Search</div>
-      <div class="iconDiv justHover" onclick="nextMenu(event);">Project Example<i class="material-icons">arrow_right</i></div>
-      <div class="iconDiv justHover" onclick="nextMenu(event);">David’s project<i class="material-icons">arrow_right</i></div>
-      <div class="iconDiv justHover" onclick="nextMenu(event);">Project Idan<i class="material-icons">arrow_right</i></div>
-      <div class="iconDiv justHover" onclick="nextMenu(event);">Manhattan<i class="material-icons">arrow_right</i></div>
-      <div class="topBorder iconDiv noSpace" onclick="prevMenu(event);"><i class="material-icons">arrow_back</i>Back</div>
-    </div>
-    <div class="multiSelect" id="menu-2">
-      <div class="bottomBorder titleDiv">Project Idan</div>
-      <div onclick="openMulti();">Idan Vector</div>
-      <div onclick="openMulti();">Testings</div>
-      <div onclick="openMulti();">Features_120</div>
-      <div onclick="openMulti();">Aggregators</div>
-      <div id="menu-1" class="topBorder iconDiv noSpace" onclick="prevMenu(event);"><i class="material-icons">arrow_back</i>Back</div>
-    </div>
-    <div>
-    </div>
+/*
+```js
+*/
 
-<style>
+(function(){
+  // ==================== CSS 注入 ====================
+  const style = document.createElement('style');
+  style.textContent = `
 :root {
-  --bgColor: #0fddaf;
+  --bgColor: #869cff;
   --txtColor: #ffffff;
-  --borColor: rgba(0, 0, 0, 0);
-  --sizeVar: 8px;
-  --textPrimary: #4b4760;
-  --textSecondary: #7f7989;
   --borderColor: #cccccc;
 }
 body {
-  font-family: "Roboto", sans-serif;
-  font-weight: 400;
-  font-size: calc(var(--sizeVar) * 1.75);
+  font-family: sans-serif;
+  margin: 0;
 }
-.flexDiv {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: fit-content;
-  margin: 32px;
+.sec_btn {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  background: var(--bgColor);
+  color: var(--txtColor);
+  border: none;
+  border-radius: 4px;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+.sec_btn:hover {
+  background: #6279e7;
 }
 .selectWrapper {
-  width: 100%;
-  position: relative;
+  position: fixed;
+  right: 20px;
+  bottom: 60px;
+  min-width: 220px;
+  max-width: 300px;
+  background: #fff;
+  border: 1px solid var(--borderColor);
+  border-radius: 4px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 100ms linear 0s;
-  filter: drop-shadow(0 6px 26px rgba(0, 0, 0, 0.24));
-  padding-top: calc(var(--sizeVar) / 2);
+  transition: opacity 0.2s;
+  overflow: hidden;
+}
+.scrollContainer {
+  display: flex;
+  width: 100%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 .multiSelect {
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
-  border: 1px solid var(--borderColor);
+  flex: 0 0 100%;
   box-sizing: border-box;
-  border-radius: calc(var(--sizeVar) / 2);
-  position: absolute;
-  width: auto;
-  left: 0;
-  right: 0;
-  overflow: hidden;
-  background: #ffffff;
-  transition: transform 300ms ease-in-out 0s, clip-path 300ms ease-in-out 0s;
+  background: #fff;
 }
 .multiSelect div {
-  color: var(--textPrimary);
-  padding: 16px;
-  width: auto;
+  padding: 8px 12px;
   cursor: pointer;
 }
 .multiSelect div:hover {
-  background-color: #f6f6f6;
+  background: #f0f0f0;
 }
-.bottomBorder {
-  border-bottom: 1px solid var(--borderColor);
-}
-.topBorder {
-  border-top: 1px solid var(--borderColor);
-}
+.bottomBorder { border-bottom: 1px solid var(--borderColor); }
+.topBorder { border-top: 1px solid var(--borderColor); }
 .iconDiv {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
 }
-.noSpace {
-  justify-content: flex-start;
-  gap: 6px;
-}
-.titleDiv {
-  pointer-events: none;
-  font-weight: 700;
-}
-.justHover i {
-  opacity: 0;
-}
-.justHover:hover i {
-  opacity: 1;
-}
-.multiSelect .placeholder {
-  color: var(--textSecondary);
-  font-style: italic;
-}
-.multiSelect .narrow {
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-.multiSelect i {
-  color: var(--textSecondary);
-}
-.multiSelect {
-  transform: translateX(100%);
-  clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
-}
-.multiSelect:nth-of-type(1) {
-  transform: translateX(0);
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
-}
-.sec_btn {
-  --bgColor: #869cff;
-}
-button {
-  font-family: "Roboto", sans-serif;
-  font-size: calc(var(--sizeVar) * 1.75);
-  font-weight: 500;
-  border: none;
-  outline: none;
-  padding: var(--sizeVar) calc(var(--sizeVar) * 2);
-  border-radius: calc(var(--sizeVar) / 2);
-  cursor: pointer;
-  background-color: var(--bgColor);
-  color: var(--txtColor);
-  box-shadow: 0 0 0 1px var(--borColor) inset;
-}
-button:focus {
-  --borColor: rgba(0, 0, 0, 0.4);
-}
-button:hover {
-  --bgColor: #1fcc9e;
-}
-.sec_btn:hover {
-  --bgColor: #6279e7;
-}
-.tri_btn:hover {
-  --bgColor: #f8f7f8;
-}
-button:active {
-  --bgColor: #1db284;
-}
-.sec_btn:active {
-  --bgColor: #5468c7;
-}
-.tri_btn:active {
-  --bgColor: #e7e7e7;
-}
+`;
+  document.head.appendChild(style);
 
-</style>
+  // 创建按钮
+  const button = document.createElement('button');
+  button.className = 'sec_btn';
+  button.innerText = 'Add to feature vector';
+  button.onclick = toggleMenu;
+  document.body.appendChild(button);
 
-<script>
-function openMulti() {
-  if (document.querySelector(".selectWrapper").style.pointerEvents == "all") {
-    document.querySelector(".selectWrapper").style.opacity = 0;
-    document.querySelector(".selectWrapper").style.pointerEvents = "none";
-    resetAllMenus();
-  } else {
-    document.querySelector(".selectWrapper").style.opacity = 1;
-    document.querySelector(".selectWrapper").style.pointerEvents = "all";
-  }
-}
-function nextMenu(e) {
-  menuIndex = eval(event.target.parentNode.id.slice(-1));
-  document.querySelectorAll(".multiSelect")[menuIndex].style.transform =
-    "translateX(-100%)";
-  // document.querySelectorAll(".multiSelect")[menuIndex].style.clipPath = "polygon(0 0, 0 0, 0 100%, 0% 100%)";
-  document.querySelectorAll(".multiSelect")[menuIndex].style.clipPath =
-    "polygon(100% 0, 100% 0, 100% 100%, 100% 100%)";
-  document.querySelectorAll(".multiSelect")[menuIndex + 1].style.transform =
-    "translateX(0)";
-  document.querySelectorAll(".multiSelect")[menuIndex + 1].style.clipPath =
-    "polygon(0 0, 100% 0, 100% 100%, 0% 100%)";
-}
-function prevMenu(e) {
-  menuIndex = eval(event.target.parentNode.id.slice(-1));
-  document.querySelectorAll(".multiSelect")[menuIndex].style.transform =
-    "translateX(100%)";
-  document.querySelectorAll(".multiSelect")[menuIndex].style.clipPath =
-    "polygon(0 0, 0 0, 0 100%, 0% 100%)";
-  document.querySelectorAll(".multiSelect")[menuIndex - 1].style.transform =
-    "translateX(0)";
-  document.querySelectorAll(".multiSelect")[menuIndex - 1].style.clipPath =
-    "polygon(0 0, 100% 0, 100% 100%, 0% 100%)";
-}
-function resetAllMenus() {
-  setTimeout(function () {
-    var x = document.getElementsByClassName("multiSelect");
-    var i;
-    for (i = 1; i < x.length; i++) {
-      x[i].style.transform = "translateX(100%)";
-      x[i].style.clipPath = "polygon(0 0, 0 0, 0 100%, 0% 100%)";
+  // 创建菜单容器
+  const wrapper = document.createElement('div');
+  wrapper.className = 'selectWrapper';
+  wrapper.id = 'menuWrapper';
+
+  // 创建滚动容器
+  const scrollContainer = document.createElement('div');
+  scrollContainer.className = 'scrollContainer';
+  scrollContainer.id = 'scrollContainer';
+  wrapper.appendChild(scrollContainer);
+
+  document.body.appendChild(wrapper);
+
+  // 定义菜单数据
+  const menus = [
+    [
+      { type: 'text', text: 'New feature vector', class: 'bottomBorder' },
+      { type: 'item', text: 'Vector_01' },
+      { type: 'item', text: 'myVector' },
+      { type: 'item', text: 'featureVector' },
+      { type: 'nav', text: 'Other projects', target: 1 }
+    ],
+    [
+      { type: 'text', text: 'Search', class: 'bottomBorder' },
+      { type: 'nav', text: 'Project Example', target: 2 },
+      { type: 'nav', text: 'David’s project', target: 2 },
+      { type: 'nav', text: 'Project Idan', target: 2 },
+      { type: 'nav', text: 'Manhattan', target: 2 },
+      { type: 'back', text: '◀ Back', target: 0 }
+    ],
+    [
+      { type: 'text', text: 'Project Idan', class: 'bottomBorder' },
+      { type: 'item', text: 'Idan Vector' },
+      { type: 'item', text: 'Testings' },
+      { type: 'item', text: 'Features_120' },
+      { type: 'item', text: 'Aggregators' },
+      { type: 'back', text: '◀ Back', target: 1 }
+    ]
+  ];
+
+  // 生成菜单层
+  menus.forEach((menuItems, index) => {
+    const menuDiv = document.createElement('div');
+    menuDiv.className = 'multiSelect';
+    menuDiv.id = `menu-${index}`;
+    menuItems.forEach(item => {
+      const div = document.createElement('div');
+      div.innerText = item.text;
+      if (item.class) div.className = item.class;
+      if (item.type === 'item') {
+        div.onclick = () => selectItem(item.text);
+      } else if (item.type === 'nav') {
+        div.className = (div.className ? div.className + ' ' : '') + 'iconDiv topBorder';
+        div.onclick = () => goToMenu(item.target);
+      } else if (item.type === 'back') {
+        div.className = (div.className ? div.className + ' ' : '') + 'topBorder';
+        div.onclick = () => goToMenu(item.target);
+      }
+      menuDiv.appendChild(div);
+    });
+    scrollContainer.appendChild(menuDiv);
+  });
+
+  // 切换菜单
+  function toggleMenu() {
+    if (wrapper.style.opacity === '1') {
+      wrapper.style.opacity = '0';
+      wrapper.style.pointerEvents = 'none';
+      goToMenu(0);
+    } else {
+      wrapper.style.opacity = '1';
+      wrapper.style.pointerEvents = 'all';
     }
-    document.querySelectorAll(".multiSelect")[0].style.transform =
-      "translateX(0)";
-    document.querySelectorAll(".multiSelect")[0].style.clipPath =
-      "polygon(0 0, 100% 0, 100% 100%, 0% 100%)";
-  }, 300);
-}
+  }
 
-</script>
+  function goToMenu(index) {
+    const width = scrollContainer.clientWidth;
+    scrollContainer.scrollTo({
+      left: width * index,
+      behavior: 'smooth'
+    });
+  }
+
+  function selectItem(name) {
+    alert(`Selected: ${name}`);
+    toggleMenu();
+  }
+
+  // 点击外部关闭菜单
+  document.addEventListener('click', (e) => {
+    if (!wrapper.contains(e.target) && e.target !== button) {
+      wrapper.style.opacity = '0';
+      wrapper.style.pointerEvents = 'none';
+      goToMenu(0);
+    }
+  });
+})();
+
+/*
+```
+*/
