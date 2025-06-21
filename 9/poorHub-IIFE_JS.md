@@ -33,6 +33,7 @@
       scroll-behavior: smooth;
     }
     .multiSelect {
+      width: 100%;
       flex: 0 0 100%;
       box-sizing: border-box; background: #fff;
     }
