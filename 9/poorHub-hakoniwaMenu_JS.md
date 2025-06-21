@@ -3,7 +3,8 @@
 */
 
 (function(){
-  const style = document.createElement("style");
+  // ==================== CSS 注入 ====================
+  const style = document.createElement('style');
   style.textContent = `
 :root {
   --bgColor: #869cff;
@@ -46,8 +47,10 @@ body {
 .scrollContainer {
   display: flex;
   width: 100%;
-  overflow-x: hidden;
+  overflow-x: auto;
   scroll-behavior: smooth;
+  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none; /* Firefox */
 }
 .multiSelect {
   flex: 0 0 100%;
@@ -68,9 +71,10 @@ body {
   justify-content: space-between;
   align-items: center;
 }
-  `;
+`;
   document.head.appendChild(style);
-  // 创建按钮
+
+// 创建按钮
   const button = document.createElement('button');
   button.className = 'sec_btn';
   button.innerText = 'Add to feature vector';
